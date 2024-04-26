@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Redactor</string>
     <string name="main_title">Главная страница</string>
+    <string name="main_subtitle">Выберите фото для редкатирования</string>
 </resources>

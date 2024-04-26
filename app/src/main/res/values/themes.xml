@@ -6,4 +6,5 @@
     </style>
 
     <style name="Theme.Redactor" parent="Base.Theme.Redactor" />
+    
 </resources>
