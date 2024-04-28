@@ -34,7 +34,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="@color/white"
         android:orientation="horizontal"
         android:padding="15dp"
@@ -61,53 +61,141 @@
         android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:background="@color/line_color"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="120dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.071">
 
-        <!-- Первый квадратный блок -->
-
-        <!-- Второй квадратный блок -->
-
-        <!-- Третий квадратный блок -->
-        <View
+        <LinearLayout
+            android:id="@+id/firstBlock"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@android:color/holo_blue_light" />
+            android:background="@drawable/rounded_conors"
+            android:orientation="vertical">
 
-        <View
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_add_24"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="32dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/all_photos"
+                android:textAlignment="center"
+                />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/secondBlock"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@android:color/holo_green_light" />
+            android:background="@drawable/rounded_conors"
+            android:orientation="vertical">
 
-        <View
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_add_24"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/all_photos" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/thirdBlock"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@android:color/holo_red_light" />
+            android:background="@drawable/rounded_conors"
+            android:orientation="vertical">
 
-        <!-- Четвертый квадратный блок -->
-        <View
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_add_24"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/all_photos" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fourthBlock"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@android:color/holo_orange_light" />
+            android:background="@drawable/rounded_conors"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_add_24"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/all_photos" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/line_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

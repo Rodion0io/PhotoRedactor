@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Instrumentation.ActivityResult
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -27,6 +28,15 @@ class MainActivity : AppCompatActivity() {
         }
         registerPermissionListner()
         checkCameraPermission()
+//
+        val check: View = findViewById(R.id.firstBlock)
+
+        check.setOnClickListener{
+            Toast.makeText(this, "bimbimbambam", Toast.LENGTH_SHORT).show()
+        }
+
+
+
     }
     private fun checkCameraPermission(){
         when {
