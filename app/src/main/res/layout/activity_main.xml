@@ -9,9 +9,10 @@
     tools:context=".MainActivity">
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bgc"/>
+        android:background="@drawable/bgc" />
 
 
     <TextView
@@ -87,28 +88,6 @@
                 android:text="@string/on_camera"
 
                 />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/thirdBlock"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_conors"
-            android:orientation="vertical">
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/fourthBlock"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_conors"
-            android:orientation="vertical">
 
         </LinearLayout>
 
