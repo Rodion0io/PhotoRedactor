@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Beta app</string>
-    <string name="main_title">Главная страница</string>
-    <string name="main_subtitle">Выберите фото для редкатирования</string>
+    <string name="app_title">Photo editor</string>
     <string name="all_photos">Смотреть все</string>
+    <string name="on_camera">Камера</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

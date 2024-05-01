@@ -1,7 +1,7 @@
 package com.example.redactor
 
 import android.Manifest
-import android.app.Instrumentation.ActivityResult
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 class MainActivity : AppCompatActivity() {
 
     private lateinit var pLauncher: ActivityResultLauncher<String>
+    private val PICK_IMAGE_REQUEST = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,18 +27,27 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
+
         registerPermissionListner()
         checkCameraPermission()
-//
+
         val check: View = findViewById(R.id.firstBlock)
 
         check.setOnClickListener{
-            Toast.makeText(this, "bimbimbambam", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "bimbimbambam", Toast.LENGTH_SHORT).show();
         }
 
 
+        val nextt: View = findViewById(R.id.secondBlock);
+
+        nextt.setOnClickListener {
+            onClick();
+        }
 
     }
+
     private fun checkCameraPermission(){
         when {
             ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
@@ -59,4 +69,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    public fun onClick(){
+        val action = Intent(this, RedactActivity::class.java);
+        startActivity(action);
+    }
+
+
 }
