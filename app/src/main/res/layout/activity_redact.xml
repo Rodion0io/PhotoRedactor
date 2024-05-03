@@ -5,17 +5,64 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".RedactActivity">
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="104dp"
-        android:backgroundTint="@color/black"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:id="@+id/RedactNav"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/navbar_redactor"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/back"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:tint="@color/white"
+            android:layout_marginRight="3dp"
+
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/download"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/baseline_download_24"
+            app:tint="@color/white"
+            />
+
+    </LinearLayout>
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imagePreview"
+        android:layout_width="310dp"
+        android:layout_height="455dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RedactNav"
+        app:layout_constraintVertical_bias="0.361" />
+
+
+    <LinearLayout
+        android:id="@+id/RedactFooter"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/navbar_redactor"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
