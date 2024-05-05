@@ -25,19 +25,15 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:src="@drawable/baseline_arrow_back_24"
-            app:tint="@color/white"
-            android:layout_marginRight="3dp"
 
-            />
+            app:tint="@color/white" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/download"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:src="@drawable/baseline_download_24"
-            app:tint="@color/white"
-            />
-
+            app:tint="@color/white" />
     </LinearLayout>
 
 
@@ -45,7 +41,7 @@
         android:id="@+id/imagePreview"
         android:layout_width="310dp"
         android:layout_height="455dp"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"

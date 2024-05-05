@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -35,30 +36,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
+
 
 
         registerPermissionListner()
         checkCameraPermission()
 
-//        val check: View = findViewById(R.id.firstBlock)
-//
-//        check.setOnClickListener{
-//            Toast.makeText(this, "bimbimbambam", Toast.LENGTH_SHORT).show();
-//        }
-
 
         val nextt: View = findViewById(R.id.secondBlock);
 
         nextt.setOnClickListener {
-            onClick();
         }
-        setListners()
+        setListnersGalary()
     }
 
-    private fun setListners(){
+    private fun setListnersGalary(){
         binding.firstBlock.setOnClickListener{
             Intent(
                 Intent.ACTION_PICK,
@@ -69,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-//
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK && data != null) {
@@ -81,6 +76,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+//    private fun f(){
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 12)
+//        }
+//        else{
+//            Intent(this, RedactActivity::class.java)
+//        }
+//    }
 
 
     private fun checkCameraPermission(){
@@ -104,11 +108,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    public fun onClick() {
-        val action = Intent(this, RedactActivity::class.java)
-        startActivity(action)
-    }
-
 
 }
