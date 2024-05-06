@@ -8,7 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.SeekBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -51,6 +54,27 @@ class RedactActivity : AppCompatActivity() {
             seekOn()
 
         }
+
+
+        var drawable = findViewById<ImageView>(R.id.imagePreview).drawable as BitmapDrawable;
+        var bitmap = drawable.bitmap
+
+        val seekBar: SeekBar = findViewById(R.id.settingAngle);
+        val text: TextView = findViewById(R.id.currentAngle)
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                text.text = progress.toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+            }
+        })
 
 
     }

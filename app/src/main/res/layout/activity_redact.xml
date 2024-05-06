@@ -45,6 +45,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
 
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imagePreview"
         android:layout_width="310dp"
@@ -52,11 +53,9 @@
         android:scaleType="center"
         app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RedactNav"
-        app:layout_constraintVertical_bias="0.361" />
-
+        app:layout_constraintVertical_bias="0.224" />
 
     <LinearLayout
         android:id="@+id/RedactFooter"
@@ -79,15 +78,34 @@
         android:text="нажми"
         />
 
+    <TextView
+        android:id="@+id/currentAngle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/settingAngle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="bim bim bam bam"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/imagePreview" />
+
     <SeekBar
         android:id="@+id/settingAngle"
         android:layout_width="329dp"
         android:layout_height="28dp"
+        android:progressTint="@color/white"
+        android:thumb="@drawable/custom_thumb"
+        android:visibility="invisible"
+        android:min="-180"
+        android:max="180"
+        android:progress="0"
         app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@+id/imagePreview" />
+        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
+        app:layout_constraintVertical_bias="0.679" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
