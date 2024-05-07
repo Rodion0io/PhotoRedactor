@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.redactor.algorithms.Rotate
 import com.example.redactor.databinding.ActivityMainBinding
 import com.example.redactor.databinding.ActivityRedactBinding
 import java.net.URI
@@ -26,6 +27,7 @@ class RedactActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityRedactBinding
+    val rotate = Rotate();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +74,9 @@ class RedactActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-
+                val rotatedBitmap = rotate.rotatePicture(bitmap, seekBar.progress.toDouble())
+                val imageView = findViewById<ImageView>(R.id.imagePreview)
+                imageView.setImageBitmap(rotatedBitmap)
             }
         })
 
