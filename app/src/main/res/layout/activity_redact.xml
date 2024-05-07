@@ -48,8 +48,8 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imagePreview"
-        android:layout_width="310dp"
-        android:layout_height="455dp"
+        android:layout_width="307dp"
+        android:layout_height="443dp"
         android:scaleType="center"
         app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
         app:layout_constraintEnd_toEndOf="parent"
