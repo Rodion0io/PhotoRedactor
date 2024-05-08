@@ -51,7 +51,8 @@ class MainActivity : AppCompatActivity() {
         val nextt: View = findViewById(R.id.secondBlock);
 
         nextt.setOnClickListener {
-            startActivity(Intent(applicationContext, RedactActivity::class.java))
+            dispatchTakePictureIntent()
+
         }
         setListnersGalary()
 
