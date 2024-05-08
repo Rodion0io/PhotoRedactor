@@ -1,4 +1,4 @@
-package com.example.redactor
+package com.example.redactor.actions
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -12,7 +12,7 @@ import java.util.*
 
 class Save(private val context: Context) {
 
-    fun saveBitmapToGallery(bitmap: Bitmap, filename: String): Boolean {
+    public fun saveBitmapToGallery(bitmap: Bitmap, filename: String): Boolean {
         val directory = getAlbumStorageDir("Redactor")
         if (!directory.exists()) {
             if (!directory.mkdirs()) {
@@ -43,10 +43,11 @@ class Save(private val context: Context) {
         return file
     }
 
-    fun savePicture(bitmap: Bitmap) {
+    public fun savePicture(bitmap: Bitmap) {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val fileName = "IMG_$timeStamp.jpg"
         // Сохраняем Bitmap в галерею
         saveBitmapToGallery(bitmap, fileName)
+
     }
 }

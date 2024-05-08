@@ -1,8 +1,10 @@
 package com.example.redactor
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -49,8 +51,18 @@ class MainActivity : AppCompatActivity() {
         val nextt: View = findViewById(R.id.secondBlock);
 
         nextt.setOnClickListener {
+            startActivity(Intent(applicationContext, RedactActivity::class.java))
         }
         setListnersGalary()
+
+        fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+                val imageBitmap = data?.extras?.get("data") as Bitmap
+                // Далее можно использовать полученное изображение (imageBitmap) по вашему усмотрению
+            }
+        }
     }
 
     private fun setListnersGalary(){
@@ -108,5 +120,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
+    val REQUEST_IMAGE_CAPTURE = 1
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
+
 
 }

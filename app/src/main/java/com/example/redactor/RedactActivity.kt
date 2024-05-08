@@ -12,19 +12,17 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.redactor.actions.Save
 import com.example.redactor.algorithms.Rotate
-import com.example.redactor.databinding.ActivityMainBinding
 import com.example.redactor.databinding.ActivityRedactBinding
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
-import java.net.URI
 
 
 class RedactActivity : AppCompatActivity() {
