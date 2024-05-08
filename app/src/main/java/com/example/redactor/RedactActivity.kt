@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -20,6 +21,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.redactor.algorithms.Rotate
 import com.example.redactor.databinding.ActivityMainBinding
 import com.example.redactor.databinding.ActivityRedactBinding
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.net.URI
 
 
@@ -40,6 +44,8 @@ class RedactActivity : AppCompatActivity() {
             insets
         }
 
+        val saveInstance = Save(this);
+
         val backButton: View = findViewById(R.id.back);
 
         backButton.setOnClickListener {
@@ -57,9 +63,17 @@ class RedactActivity : AppCompatActivity() {
 
         }
 
-
         var drawable = findViewById<ImageView>(R.id.imagePreview).drawable as BitmapDrawable;
         var bitmap = drawable.bitmap
+
+        val downloadButton: ImageView = findViewById(R.id.download)
+
+        downloadButton.setOnClickListener {
+            saveInstance.savePicture(bitmap)
+        }
+
+
+
 
         val seekBar: SeekBar = findViewById(R.id.settingAngle);
         val text: TextView = findViewById(R.id.currentAngle)
@@ -82,6 +96,8 @@ class RedactActivity : AppCompatActivity() {
 
 
     }
+
+
 
     private fun onCreate(){
         intent.getParcelableExtra<Uri>(MainActivity.KEY_IMAGE_URI)?.let { imageUri ->
@@ -107,5 +123,29 @@ class RedactActivity : AppCompatActivity() {
     public fun seekOn(){
         val seek: SeekBar = findViewById(R.id.settingAngle)
         seek.setVisibility(ConstraintLayout.VISIBLE)
+    }
+
+    private fun saveImageAndShare() {
+        // Получаем Bitmap из ImageView
+        val imageView = findViewById<ImageView>(R.id.imagePreview)
+        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+
+        // Сохраняем Bitmap во внешнем хранилище устройства
+        val imagesDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val imageFile = File(imagesDir, "image.png")
+
+        val outputStream: OutputStream = FileOutputStream(imageFile)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        // Создаем Intent для отправки изображения
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "image/png"
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageFile)
+
+        // Запускаем Intent
+        startActivity(Intent.createChooser(shareIntent, "Share Image"))
     }
 }
