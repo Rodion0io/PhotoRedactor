@@ -14,21 +14,26 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.redactor.databinding.ActivityMainBinding
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_CODE_PICK_IMAGE = 1
         private const val REQUEST_IMAGE_CAPTURE = 2
+        private const val FILENAME_TEMP = "temp_image.jpg"
+        private const val FILE_PROVIDER_AUTHORITY = "com.example.redactor.fileprovider"
         const val KEY_IMAGE_URI = "imageUri"
         const val KEY_IMAGE_BITMAP = "imageBitmap"
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var pLauncher: ActivityResultLauncher<String>
+    private lateinit var imageTempUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +47,13 @@ class MainActivity : AppCompatActivity() {
 
         registerPermissionListner()
         checkCameraPermission()
+
+        // Создаем imageTempUri здесь, так как это метод экземпляра
+        imageTempUri = FileProvider.getUriForFile(
+            this,
+            FILE_PROVIDER_AUTHORITY,
+            File(cacheDir, FILENAME_TEMP)
+        )
 
         val nextt: View = findViewById(R.id.secondBlock)
         nextt.setOnClickListener { takePictIntent() }
@@ -71,9 +83,8 @@ class MainActivity : AppCompatActivity() {
             }
             REQUEST_IMAGE_CAPTURE -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    val imageBitmap = data?.extras?.get("data") as Bitmap
                     val intent = Intent(this, RedactActivity::class.java)
-                    intent.putExtra(KEY_IMAGE_BITMAP, imageBitmap)
+                    intent.putExtra(KEY_IMAGE_URI, imageTempUri)
                     startActivity(intent)
                 }
             }
@@ -104,6 +115,8 @@ class MainActivity : AppCompatActivity() {
     private fun takePictIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(packageManager)?.also {
+                // Устанавливаем EXTRA_OUTPUT и передаем Uri для сохранения фотографии
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageTempUri)
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             }
         }

@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -14,7 +13,6 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.redactor.actions.Save
@@ -23,7 +21,6 @@ import com.example.redactor.databinding.ActivityRedactBinding
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
-
 
 class RedactActivity : AppCompatActivity() {
 
