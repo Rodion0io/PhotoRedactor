@@ -1,6 +1,7 @@
 package com.example.redactor.algorithms
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -37,7 +38,7 @@ class Rotate {
         val newWidth = (maxiX - miniX).toInt()
         val newHeight = (maxiY - miniY).toInt()
 
-        val outputBitmap = Bitmap.createBitmap(newWidth, newHeight, pict.config)
+        val outputBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888)
 
         for (newX in 0 until newWidth) {
             for (newY in 0 until newHeight) {
@@ -46,6 +47,9 @@ class Rotate {
 
                 if (originalX in 0 until width && originalY in 0 until height) {
                     outputBitmap.setPixel(newX, newY, pict.getPixel(originalX, originalY))
+                }
+                else{
+                    outputBitmap.eraseColor(Color.BLACK)
                 }
             }
         }

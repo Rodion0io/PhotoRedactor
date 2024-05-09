@@ -85,7 +85,8 @@
         app:layout_constraintBottom_toTopOf="@+id/settingAngle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="bim bim bam bam"
+        android:visibility="invisible"
+        android:text=""
         android:textColor="@color/white"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview" />

@@ -42,6 +42,7 @@ class RedactActivity : AppCompatActivity() {
             insets
         }
 
+
         val saveInstance = Save(this);
 
         val backButton: View = findViewById(R.id.back);
@@ -56,7 +57,7 @@ class RedactActivity : AppCompatActivity() {
         val a: Button = findViewById(R.id.knopka)
 
         a.setOnClickListener {
-            
+
             seekOn()
 
         }
@@ -96,7 +97,6 @@ class RedactActivity : AppCompatActivity() {
     }
 
 
-
     private fun onCreate(){
         intent.getParcelableExtra<Uri>(MainActivity.KEY_IMAGE_URI)?.let { imageUri ->
             val inputStream = contentResolver.openInputStream(imageUri)
@@ -120,30 +120,9 @@ class RedactActivity : AppCompatActivity() {
 
     public fun seekOn(){
         val seek: SeekBar = findViewById(R.id.settingAngle)
+        val testSetting: TextView = findViewById(R.id.currentAngle)
         seek.setVisibility(ConstraintLayout.VISIBLE)
+        testSetting.setVisibility(ConstraintLayout.VISIBLE)
     }
 
-    private fun saveImageAndShare() {
-        // Получаем Bitmap из ImageView
-        val imageView = findViewById<ImageView>(R.id.imagePreview)
-        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-
-        // Сохраняем Bitmap во внешнем хранилище устройства
-        val imagesDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        val imageFile = File(imagesDir, "image.png")
-
-        val outputStream: OutputStream = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        outputStream.flush()
-        outputStream.close()
-
-        // Создаем Intent для отправки изображения
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "image/png"
-        shareIntent.putExtra(Intent.EXTRA_STREAM, imageFile)
-
-        // Запускаем Intent
-        startActivity(Intent.createChooser(shareIntent, "Share Image"))
-    }
 }
