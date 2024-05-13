@@ -8,21 +8,24 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.SeekBar
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.redactor.databinding.ActivityMainBinding
+import com.example.redactor.actions.Save
+import com.example.redactor.algorithms.Rotate
 import com.example.redactor.databinding.ActivityRedactBinding
-import java.net.URI
-
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 class RedactActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivityRedactBinding
+    val rotate = Rotate()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,40 +38,53 @@ class RedactActivity : AppCompatActivity() {
             insets
         }
 
-        val backButton: View = findViewById(R.id.back);
+        val saveInstance = Save(this)
 
-        backButton.setOnClickListener {
-            onClick();
-        }
+        val backButton: View = findViewById(R.id.back)
+        backButton.setOnClickListener { onClick() }
 
-        onCreate()
         setListners()
 
         val a: Button = findViewById(R.id.knopka)
+        a.setOnClickListener { seekOn() }
 
-        a.setOnClickListener {
-            
-            seekOn()
-
-        }
-
-
-    }
-
-    private fun onCreate(){
-        intent.getParcelableExtra<Uri>(MainActivity.KEY_IMAGE_URI)?.let { imageUri ->
-            val inputStream = contentResolver.openInputStream(imageUri)
+        val imageUri = intent.getParcelableExtra<Uri>(MainActivity.KEY_IMAGE_URI)
+        imageUri?.let {
+            val inputStream = contentResolver.openInputStream(it)
             val bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream?.close()
             binding.imagePreview.setImageBitmap(bitmap)
             binding.imagePreview.visibility = View.VISIBLE
         }
+
+        val downloadButton: ImageView = findViewById(R.id.download)
+        downloadButton.setOnClickListener {
+            val bitmap = (binding.imagePreview.drawable as BitmapDrawable).bitmap
+            saveInstance.savePicture(bitmap)
+        }
+
+        val seekBar: SeekBar = findViewById(R.id.settingAngle)
+        val text: TextView = findViewById(R.id.currentAngle)
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                text.text = progress.toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) { }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                val rotatedBitmap = rotate.rotatePicture(
+                    (binding.imagePreview.drawable as BitmapDrawable).bitmap,
+                    seekBar.progress.toDouble()
+                )
+                binding.imagePreview.setImageBitmap(rotatedBitmap)
+            }
+        })
     }
 
-    private fun setListners(){
-        binding.back.setOnClickListener{
-            onBackPressed();
-        }
+    private fun setListners() {
+        binding.back.setOnClickListener { onBackPressed() }
     }
 
     public fun onClick() {
@@ -76,8 +92,10 @@ class RedactActivity : AppCompatActivity() {
         startActivity(action)
     }
 
-    public fun seekOn(){
+    public fun seekOn() {
         val seek: SeekBar = findViewById(R.id.settingAngle)
-        seek.setVisibility(ConstraintLayout.VISIBLE)
+        val testSetting: TextView = findViewById(R.id.currentAngle)
+        seek.visibility = View.VISIBLE
+        testSetting.visibility = View.VISIBLE
     }
 }
