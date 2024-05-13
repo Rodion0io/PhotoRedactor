@@ -48,14 +48,15 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imagePreview"
-        android:layout_width="307dp"
-        android:layout_height="443dp"
-        android:scaleType="center"
+        android:layout_width="286dp"
+        android:layout_height="373dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RedactNav"
-        app:layout_constraintVertical_bias="0.224" />
+        app:layout_constraintVertical_bias="0.179" />
 
     <LinearLayout
         android:id="@+id/RedactFooter"
@@ -65,48 +66,74 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </LinearLayout>
 
     <Button
-        android:id="@+id/knopka"
+        android:id="@+id/rotate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="поворот"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
+
+    <Button
+        android:id="@+id/retuch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="155dp"
+        android:text="ретушь"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/RedactFooter"
-        app:layout_constraintStart_toStartOf="@+id/RedactFooter"
-        app:layout_constraintTop_toTopOf="@+id/RedactFooter"
-        android:text="нажми"
-        />
+        app:layout_constraintStart_toEndOf="@+id/rotate"
+        app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
+
 
     <TextView
         android:id="@+id/currentAngle"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/settingAngle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
+        app:layout_constraintVertical_bias="0.612" />
+
+    <EditText
+        android:layout_width="309dp"
+        android:layout_height="47dp"
+        android:inputType="text"
         android:visibility="invisible"
-        android:text=""
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@+id/imagePreview" />
+        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+        app:layout_constraintEnd_toEndOf="@+id/currentAngle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
+        app:layout_constraintVertical_bias="0.157" />
 
     <SeekBar
         android:id="@+id/settingAngle"
         android:layout_width="329dp"
         android:layout_height="28dp"
+        android:max="180"
+        android:min="-180"
+        android:progress="0"
         android:progressTint="@color/white"
         android:thumb="@drawable/custom_thumb"
         android:visibility="invisible"
-        android:min="-180"
-        android:max="180"
-        android:progress="0"
         app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="0.679" />
+        app:layout_constraintVertical_bias="0.834" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
