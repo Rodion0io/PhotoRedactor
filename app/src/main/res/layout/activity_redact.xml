@@ -8,7 +8,6 @@
     android:background="@color/black"
     tools:context=".RedactActivity">
 
-
     <LinearLayout
         android:id="@+id/RedactNav"
         android:layout_width="match_parent"
@@ -44,7 +43,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
-
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imagePreview"
@@ -84,13 +82,41 @@
         android:id="@+id/retuch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="155dp"
+        android:layout_marginRight="200dp"
         android:text="ретушь"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/RedactFooter"
         app:layout_constraintStart_toEndOf="@+id/rotate"
         app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
 
+    <Button
+        android:id="@+id/filters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="90dp"
+        android:text="фильтры"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/retuch"
+        app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="масштаб"
+        app:layout_constraintBottom_toBottomOf="@+id/RedactFooter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/filters"
+        app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="маскирова"
+        app:layout_constraintBottom_toBottomOf="@+id/RedactNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/RedactNav"
+        app:layout_constraintTop_toTopOf="@+id/RedactNav" />
 
     <TextView
         android:id="@+id/currentAngle"
@@ -105,18 +131,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="0.612" />
+        app:layout_constraintVertical_bias="0.584" />
 
     <EditText
-        android:layout_width="309dp"
-        android:layout_height="47dp"
+        android:id="@+id/editText"
+        android:layout_width="306dp"
+        android:layout_height="62dp"
         android:inputType="text"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
         app:layout_constraintEnd_toEndOf="@+id/currentAngle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="0.157" />
+        app:layout_constraintVertical_bias="0.492" />
 
     <SeekBar
         android:id="@+id/settingAngle"
@@ -130,10 +157,98 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="0.834" />
+        app:layout_constraintVertical_bias="0.729" />
+
+    <SeekBar
+        android:id="@+id/sizeBrush"
+        android:layout_width="329dp"
+        android:layout_height="28dp"
+        android:max="25"
+        android:min="1"
+        android:progress="0"
+        android:progressTint="@color/white"
+        android:thumb="@drawable/custom_thumb"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
+        app:layout_constraintVertical_bias="0.654" />
+
+    <LinearLayout
+        android:id="@+id/filt"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginBottom="28dp"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button 1" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button 2" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button 3" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button 4" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button 5" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button 6" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/rollBack"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="25dp"
+        android:visibility="invisible"
+        android:src="@drawable/rolling_back_the_filter"
+        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
+        app:tint="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/success"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginRight="25dp"
+        android:visibility="invisible"
+        android:src="@drawable/baseline_success_24"
+        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
+        app:tint="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
