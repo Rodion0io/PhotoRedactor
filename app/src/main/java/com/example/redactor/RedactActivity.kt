@@ -43,6 +43,7 @@ class RedactActivity : AppCompatActivity() {
         }
 
         val saveInstance = Save(this)
+        val newBitmap: Bitmap;
 
         val backButton: View = findViewById(R.id.back)
         backButton.setOnClickListener { onClick() }
