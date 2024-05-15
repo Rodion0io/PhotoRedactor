@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.redactor.actions.Save
 import com.example.redactor.algorithms.Filters
+import com.example.redactor.algorithms.Masking
 import com.example.redactor.algorithms.Rotate
 import com.example.redactor.databinding.ActivityRedactBinding
 import java.io.File
@@ -30,6 +31,7 @@ class RedactActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRedactBinding
     val rotate = Rotate()
     val filers = Filters();
+    val ma = Masking();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +83,7 @@ class RedactActivity : AppCompatActivity() {
         val seekBar: SeekBar = findViewById(R.id.settingAngle)
         val seekBarBrush: SeekBar = findViewById(R.id.sizeBrush)
         val text: TextView = findViewById(R.id.currentAngle)
+        val successButton: ImageView = findViewById(R.id.success);
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -117,6 +120,12 @@ class RedactActivity : AppCompatActivity() {
         val fourthFilter: Button = findViewById(R.id.button4);
         val fifthFilter: Button = findViewById(R.id.button5);
         val sixthFilter: Button = findViewById(R.id.button6);
+        val maska: Button = findViewById(R.id.mask)
+
+        maska.setOnClickListener {
+            val result = ma.Dr((binding.imagePreview.drawable as BitmapDrawable).bitmap, 5);
+            binding.imagePreview.setImageBitmap(result)
+        }
 
         filterButton.setOnClickListener {
             btnFiltersOn();
