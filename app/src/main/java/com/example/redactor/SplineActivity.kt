@@ -25,7 +25,7 @@ class SplineActivity : AppCompatActivity() {
         private val paint = Paint()
 
         init {
-            // Устанавливаем цвет и стиль кисти для рисования точек
+            // Устанавливаем цвет и стиль кисти для рисования точе
             paint.color = Color.RED
             paint.style = Paint.Style.FILL_AND_STROKE
         }
