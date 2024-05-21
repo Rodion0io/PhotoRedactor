@@ -54,7 +54,10 @@ class MainActivity : AppCompatActivity() {
             FILE_PROVIDER_AUTHORITY,
             File(cacheDir, FILENAME_TEMP)
         )
-
+        val toSpineButton: View = findViewById(R.id.toSpineButton)
+        toSpineButton.setOnClickListener {
+            val action = Intent(this, SplineActivity::class.java)
+            startActivity(action) }
         val nextt: View = findViewById(R.id.secondBlock)
         nextt.setOnClickListener { takePictIntent() }
         setListnersGalary()
