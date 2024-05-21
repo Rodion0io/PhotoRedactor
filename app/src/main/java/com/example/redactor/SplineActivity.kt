@@ -44,7 +44,7 @@ class SplineActivity : AppCompatActivity() {
         }
 
         override fun onDraw(canvas: Canvas) {
-            // Рисуем все точки из массива на канвас
+            // Рисуем все точки из массива на канвасе
             for (point in points) {
                 canvas.drawCircle(point.x, point.y, 20f, paint)
             }
