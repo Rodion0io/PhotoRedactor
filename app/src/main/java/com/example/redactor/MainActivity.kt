@@ -58,6 +58,11 @@ class MainActivity : AppCompatActivity() {
         val nextt: View = findViewById(R.id.secondBlock)
         nextt.setOnClickListener { takePictIntent() }
         setListnersGalary()
+        val toSpineButton: View = findViewById(R.id.toSpineButton)
+        toSpineButton.setOnClickListener {
+            val action = Intent(this, SplineActivity::class.java)
+            startActivity(action) }
+
     }
 
     private fun setListnersGalary() {
