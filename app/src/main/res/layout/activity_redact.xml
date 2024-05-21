@@ -56,58 +56,27 @@
         app:layout_constraintTop_toBottomOf="@+id/RedactNav"
         app:layout_constraintVertical_bias="0.179" />
 
-    <LinearLayout
-        android:id="@+id/RedactFooter"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="@color/navbar_redactor"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/rotate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="поворот"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
-
-    <Button
-        android:id="@+id/retuch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="200dp"
-        android:text="ретушь"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="405dp"
+        android:layout_height="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/RedactFooter"
-        app:layout_constraintStart_toEndOf="@+id/rotate"
+        app:layout_constraintStart_toStartOf="@+id/RedactFooter"
         app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
 
-    <Button
-        android:id="@+id/filters"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="90dp"
-        android:text="фильтры"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/retuch"
-        app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
+<!--    <LinearLayout-->
+<!--        android:id="@+id/RedactFooter"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="65dp"-->
+<!--        android:background="@color/navbar_redactor"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="масштаб"
-        app:layout_constraintBottom_toBottomOf="@+id/RedactFooter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/filters"
-        app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
+<!--    </LinearLayout>-->
 
     <Button
         android:id="@+id/mask"
@@ -138,10 +107,12 @@
         android:id="@+id/editText"
         android:layout_width="306dp"
         android:layout_height="62dp"
+        android:layout_marginTop="124dp"
         android:inputType="text"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+        app:layout_constraintBottom_toTopOf="@+id/recycler"
         app:layout_constraintEnd_toEndOf="@+id/currentAngle"
+        app:layout_constraintHorizontal_bias="0.552"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
         app:layout_constraintVertical_bias="0.492" />
@@ -178,55 +149,6 @@
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
         app:layout_constraintVertical_bias="0.654" />
 
-    <LinearLayout
-        android:id="@+id/filt"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_marginBottom="28dp"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button 1" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button 2" />
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button 3" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button 4" />
-
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button 5" />
-
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button 6" />
-
-    </LinearLayout>
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/rollBack"
         android:layout_width="22dp"
@@ -234,7 +156,7 @@
         android:layout_marginLeft="25dp"
         android:visibility="invisible"
         android:src="@drawable/rolling_back_the_filter"
-        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
         app:tint="@color/white" />
@@ -246,7 +168,7 @@
         android:layout_marginRight="25dp"
         android:visibility="invisible"
         android:src="@drawable/baseline_success_24"
-        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
         app:tint="@color/white" />
