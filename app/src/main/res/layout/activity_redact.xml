@@ -44,134 +44,90 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
 
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imagePreview"
         android:layout_width="286dp"
         android:layout_height="373dp"
+        android:layout_marginTop="60dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+
+        app:layout_constraintBottom_toTopOf="@+id/recycler"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RedactNav"
-        app:layout_constraintVertical_bias="0.179" />
+        app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="405dp"
-        android:layout_height="64dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/RedactFooter"
-        app:layout_constraintStart_toStartOf="@+id/RedactFooter"
-        app:layout_constraintTop_toTopOf="@+id/RedactFooter" />
-
-<!--    <LinearLayout-->
-<!--        android:id="@+id/RedactFooter"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="65dp"-->
-<!--        android:background="@color/navbar_redactor"-->
-<!--        android:gravity="center_vertical"-->
-<!--        android:orientation="horizontal"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent">-->
-
-<!--    </LinearLayout>-->
-
-    <Button
-        android:id="@+id/mask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="маскирова"
-        app:layout_constraintBottom_toBottomOf="@+id/RedactNav"
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="243dp"
+        android:layout_height="37dp"
+        android:progress="0"
+        android:progressTint="@color/white"
+        android:thumb="@drawable/custom_thumb"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/recycler"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/RedactNav"
-        app:layout_constraintTop_toTopOf="@+id/RedactNav" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
+        app:layout_constraintVertical_bias="0.95" />
 
     <TextView
         android:id="@+id/currentAngle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_width="155dp"
+        android:layout_height="33dp"
         android:text=""
         android:textAlignment="center"
         android:textColor="@color/white"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/settingAngle"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="0.584" />
+        app:layout_constraintVertical_bias="0.9" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="306dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="124dp"
-        android:inputType="text"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/recycler"
-        app:layout_constraintEnd_toEndOf="@+id/currentAngle"
-        app:layout_constraintHorizontal_bias="0.552"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="387dp"
+        android:layout_height="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="0.492" />
+        app:layout_constraintTop_toBottomOf="@+id/RedactNav"
+        app:layout_constraintVertical_bias="0.993" />
 
     <SeekBar
-        android:id="@+id/settingAngle"
-        android:layout_width="329dp"
-        android:layout_height="28dp"
-        android:max="180"
-        android:min="-180"
+
+        android:id="@+id/seekBar2"
+        android:layout_width="243dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="12dp"
         android:progress="0"
         android:progressTint="@color/white"
+
         android:thumb="@drawable/custom_thumb"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+        app:layout_constraintBottom_toTopOf="@+id/currentAngle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="0.729" />
+        app:layout_constraintVertical_bias="1.0" />
 
-    <SeekBar
-        android:id="@+id/sizeBrush"
-        android:layout_width="329dp"
-        android:layout_height="28dp"
-        android:max="25"
-        android:min="1"
-        android:progress="0"
-        android:progressTint="@color/white"
-        android:thumb="@drawable/custom_thumb"
+    <TextView
+        android:layout_width="155dp"
+        android:layout_height="33dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/white"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/RedactFooter"
+
+        app:layout_constraintBottom_toTopOf="@+id/seekBar2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="0.654" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/rollBack"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="25dp"
-        android:visibility="invisible"
-        android:src="@drawable/rolling_back_the_filter"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:tint="@color/white" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/success"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:layout_marginRight="25dp"
-        android:visibility="invisible"
-        android:src="@drawable/baseline_success_24"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:tint="@color/white" />
+        app:layout_constraintVertical_bias="0.681" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

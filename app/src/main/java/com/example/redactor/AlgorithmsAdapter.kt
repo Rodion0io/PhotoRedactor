@@ -17,7 +17,7 @@ class AlgorithmsAdapter (private var photos: List<ItemBlock>, private var activi
         fun onItemClick(position: Int, item: Int)
     }
 
-        val listner: OnItemClickListener? = null;
+        var listner: OnItemClickListener? = null;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlgorithmsAdapter.AlgorithmsViewHolder {
         val viewshka = LayoutInflater.from(parent.context).inflate(R.layout.item_icon, parent, false);
