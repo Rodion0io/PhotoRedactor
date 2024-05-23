@@ -46,6 +46,7 @@ class UnsharpMasking {
         return blurredBitmap;
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     public fun unsharpMasking(inputBitmap: Bitmap, radius: Int, amount: Float): Bitmap {
 
         val blurredBitmap = Gaussian(inputBitmap , radius)

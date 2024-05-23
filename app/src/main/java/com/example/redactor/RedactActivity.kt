@@ -20,17 +20,20 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.redactor.actions.Save
 import com.example.redactor.algorithms.Filters
+import com.example.redactor.algorithms.Retouching
 import com.example.redactor.algorithms.Rotate
+import com.example.redactor.algorithms.Scale
+import com.example.redactor.algorithms.UnsharpMasking
 import com.example.redactor.databinding.ActivityRedactBinding
 import kotlinx.coroutines.launch
-
 
 class RedactActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRedactBinding
     val rotate = Rotate();
-    val filers = Filters();
-
+    val mask = UnsharpMasking();
+    val retuch = Retouching();
+    val scale = Scale();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +47,6 @@ class RedactActivity : AppCompatActivity() {
         }
 
         val saveInstance = Save(this)
-        val newBitmap: Bitmap;
 
         val backButton: View = findViewById(R.id.back)
         backButton.setOnClickListener { onClick() }
@@ -66,81 +68,22 @@ class RedactActivity : AppCompatActivity() {
             saveInstance.savePicture(bitmap)
         }
 
-        val seekBar: SeekBar = findViewById(R.id.seekBar1)
-        val text: TextView = findViewById(R.id.currentAngle)
 
-
-//        seekBarBrush.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seekBarBrush: SeekBar, progress: Int, fromUser: Boolean) {
-//                text.text = progress.toString()
-//            }
-//
-//            override fun onStartTrackingTouch(seekBarBrush: SeekBar) { }
-//
-//            override fun onStopTrackingTouch(seekBarBrush: SeekBar) {
-//
-//            }
-//        })
-
-//        val filterButton: Button = findViewById(R.id.filters);
-//        val firstFilter: Button = findViewById(R.id.button1);
-//        val secondFilter: Button = findViewById(R.id.button2);
-//        val thirdFilter: Button = findViewById(R.id.button3);
-//        val fourthFilter: Button = findViewById(R.id.button4);
-//        val fifthFilter: Button = findViewById(R.id.button5);
-//        val sixthFilter: Button = findViewById(R.id.button6);
-//        val maska: Button = findViewById(R.id.mask)
-
-//        maska.setOnClickListener {
-//            val result = ma.Dr((binding.imagePreview.drawable as BitmapDrawable).bitmap, 5);
-//            binding.imagePreview.setImageBitmap(result)
-//        }
-
-//        filterButton.setOnClickListener {
-//            btnFiltersOn();
-//            actionButtonsOn();
-//        }
-
-//        firstFilter.setOnClickListener {
-//            val red = filers.redImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//            binding.imagePreview.setImageBitmap(red)
-//        }
-//
-//        secondFilter.setOnClickListener {
-//            val green = filers.greenImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//            binding.imagePreview.setImageBitmap(green)
-//        }
-//
-//        thirdFilter.setOnClickListener {
-//            val blue = filers.blueImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//            binding.imagePreview.setImageBitmap(blue)
-//        }
-//
-//        fourthFilter.setOnClickListener {
-//            val mosaic = filers.mosaicImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//            binding.imagePreview.setImageBitmap(mosaic)
-//        }
-//
-//        fifthFilter.setOnClickListener {
-//            val mirror = filers.mirrorImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//            binding.imagePreview.setImageBitmap(mirror)
-//        }
-//
-//        sixthFilter.setOnClickListener {
-//            val negative = filers.negativeImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//            binding.imagePreview.setImageBitmap(negative)
-//        }
-
-        val carousel : RecyclerView = findViewById(R.id.recycler)
 
         val listActions: List<ItemBlock> = listOf(
             ItemBlock(R.drawable.baseline_crop_rotate_24, "Поворот"),
             ItemBlock(R.drawable.baseline_filter_24, "Фильтры"),
             ItemBlock(R.drawable.baseline_add_24, "Маскировка"),
-            ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Ретушь")
+            ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Ретушь"),
+            ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Масштаб")
         )
 
+        val firstSeekBar: SeekBar = findViewById(R.id.seekBar1)
+        val firstText: TextView = findViewById(R.id.firstText)
+        val secondSeekBar: SeekBar = findViewById(R.id.seekBar2)
+        val secondText: TextView = findViewById(R.id.secondText)
 
+        val carousel : RecyclerView = findViewById(R.id.recycler)
 
         val adapter = AlgorithmsAdapter(listActions, this)
         carousel.adapter = adapter
@@ -152,16 +95,35 @@ class RedactActivity : AppCompatActivity() {
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(carousel)
 
-
         adapter.listner = object: AlgorithmsAdapter.OnItemClickListener{
             override fun onItemClick(position: Int, item: Int) {
                 when (position){
                     0->{
+                        seekOffFirstBar()
+                        seekOffSecondBar()
                         seekOnFirstBar()
-                        seekBarRotate(seekBar, text)
+                        seekBarRotate(firstSeekBar, firstText)
                     }
                     1->{
-
+                        seekOffFirstBar()
+                        seekOffSecondBar()
+                    }
+                    2->{
+                        seekOffFirstBar()
+                        seekOffSecondBar()
+                        seekOnSecondBar()
+                    }
+                    3->{
+                        seekOffFirstBar()
+                        seekOffSecondBar()
+                        seekOnSecondBar()
+                        seekBarRetuch(firstSeekBar, firstText, secondSeekBar, secondText)
+                    }
+                    4->{
+                        seekOffFirstBar()
+                        seekOffSecondBar()
+                        seekOnFirstBar()
+                        seekBarScale(firstSeekBar, firstText)
                     }
                 }
             }
@@ -200,7 +162,7 @@ class RedactActivity : AppCompatActivity() {
 
         firstSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(firstSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                firstText.text = progress.toString()
+                firstText.text = "Radius: ${progress.toString()}"
             }
 
             override fun onStartTrackingTouch(firstSeekBar: SeekBar) { }
@@ -210,7 +172,7 @@ class RedactActivity : AppCompatActivity() {
 
         secondSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(secondSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                secondText.text = progress.toString()
+                secondText.text = "Ratio: ${progress.toString()}"
             }
 
             override fun onStartTrackingTouch(secondSeekBar: SeekBar) { }
@@ -246,6 +208,30 @@ class RedactActivity : AppCompatActivity() {
         })
     }
 
+    public fun seekBarScale(firstSeekBar: SeekBar, firstText: TextView){
+        firstSeekBar.min = 0
+        firstSeekBar.max = 20;
+
+        firstSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(firstSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                firstText.text = "Ratio: ${progress.toString()}"
+            }
+
+            override fun onStartTrackingTouch(firstSeekBar: SeekBar) { }
+
+            override fun onStopTrackingTouch(firstSeekBar: SeekBar) {
+                lifecycleScope.launch {
+                    val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
+                    val scaleBitmap = scale.ImageScalling(
+                        originalPhoto,
+                        firstSeekBar.progress.toDouble()
+                    )
+                    binding.imagePreview.setImageBitmap(scaleBitmap);
+                }
+            }
+        })
+    }
+
 
     private fun setListners() {
         binding.back.setOnClickListener { onBackPressed() }
@@ -258,28 +244,28 @@ class RedactActivity : AppCompatActivity() {
 
     public fun seekOnFirstBar() {
         val seek: SeekBar = findViewById(R.id.seekBar1)
-        val testSetting: TextView = findViewById(R.id.currentAngle)
+        val testSetting: TextView = findViewById(R.id.firstText)
         seek.visibility = View.VISIBLE
         testSetting.visibility = View.VISIBLE
     }
 
     public fun seekOffFirstBar(){
         val seek: SeekBar = findViewById(R.id.seekBar1)
-        val testSetting: TextView = findViewById(R.id.currentAngle)
+        val testSetting: TextView = findViewById(R.id.firstText)
         seek.visibility = View.INVISIBLE
         testSetting.visibility = View.INVISIBLE
     }
 
     public fun seekOnSecondBar() {
         val seek: SeekBar = findViewById(R.id.seekBar2)
-        val testSetting: TextView = findViewById(R.id.currentAngle)
+        val testSetting: TextView = findViewById(R.id.secondText)
         seek.visibility = View.VISIBLE
         testSetting.visibility = View.VISIBLE
     }
 
     public fun seekOffSecondBar(){
         val seek: SeekBar = findViewById(R.id.seekBar2)
-        val testSetting: TextView = findViewById(R.id.currentAngle)
+        val testSetting: TextView = findViewById(R.id.secondText)
         seek.visibility = View.INVISIBLE
         testSetting.visibility = View.INVISIBLE
     }

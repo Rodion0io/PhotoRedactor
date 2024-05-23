@@ -44,22 +44,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
 
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imagePreview"
-        android:layout_width="286dp"
-        android:layout_height="373dp"
-        android:layout_marginTop="60dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-
-        app:layout_constraintBottom_toTopOf="@+id/recycler"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RedactNav"
-        app:layout_constraintVertical_bias="0.0" />
-
     <SeekBar
         android:id="@+id/seekBar1"
         android:layout_width="243dp"
@@ -72,10 +56,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.917" />
 
     <TextView
-        android:id="@+id/currentAngle"
+        android:id="@+id/firstText"
         android:layout_width="155dp"
         android:layout_height="33dp"
         android:text=""
@@ -90,44 +74,55 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
-        android:layout_width="404dp"
-        android:layout_height="58dp"
+        android:layout_width="400dp"
+        android:layout_height="74dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RedactNav"
-        app:layout_constraintVertical_bias="0.993" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <SeekBar
-
         android:id="@+id/seekBar2"
         android:layout_width="243dp"
         android:layout_height="37dp"
         android:layout_marginBottom="12dp"
         android:progress="0"
         android:progressTint="@color/white"
-
         android:thumb="@drawable/custom_thumb"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/currentAngle"
+        app:layout_constraintBottom_toTopOf="@+id/firstText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.962" />
 
     <TextView
+        android:id="@+id/secondText"
         android:layout_width="155dp"
         android:layout_height="33dp"
         android:text=""
         android:textAlignment="center"
         android:textColor="@color/white"
         android:visibility="invisible"
-
         app:layout_constraintBottom_toTopOf="@+id/seekBar2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagePreview"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.771" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imagePreview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/recycler"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RedactNav"
+        app:layout_constraintVertical_bias="0.123" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

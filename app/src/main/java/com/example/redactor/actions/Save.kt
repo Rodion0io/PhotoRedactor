@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
+import android.widget.Toast
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -23,9 +24,9 @@ class Save(private val context: Context) {
         return try {
             FileOutputStream(file).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                // Добавляем изображение в галерею
                 MediaStore.Images.Media.insertImage(context.contentResolver, file.absolutePath, file.name, file.name)
             }
+            showSavedMessage()
             true
         } catch (e: IOException) {
             e.printStackTrace()
@@ -34,11 +35,9 @@ class Save(private val context: Context) {
     }
 
     private fun getAlbumStorageDir(albumName: String): File {
-        // Получаем путь к каталогу для хранения изображений
         val file = File(Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES), albumName)
         if (!file.mkdirs()) {
-            // Директория не создана
         }
         return file
     }
@@ -46,8 +45,12 @@ class Save(private val context: Context) {
     public fun savePicture(bitmap: Bitmap) {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val fileName = "IMG_$timeStamp.jpg"
-        // Сохраняем Bitmap в галерею
-        saveBitmapToGallery(bitmap, fileName)
+        if (saveBitmapToGallery(bitmap, fileName)) {
+            showSavedMessage()
+        }
+    }
 
+    private fun showSavedMessage() {
+        Toast.makeText(context, "Фото сохранено", Toast.LENGTH_SHORT).show()
     }
 }
