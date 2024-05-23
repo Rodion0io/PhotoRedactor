@@ -2,16 +2,9 @@ package com.example.redactor.algorithms
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-
+import kotlin.math.*
 
 class Rotate {
     private fun makeRadian(angle: Double): Double {
@@ -20,57 +13,49 @@ class Rotate {
 
     suspend fun rotatePicture(pict: Bitmap, angle: Double): Bitmap =
         withContext(Dispatchers.Default) {
-            var radianAngle = makeRadian(angle)
-            var width = pict.width
-            var height = pict.height
-            var centerX = width / 2.0
-            var centerY = height / 2.0
+            val radianAngle = makeRadian(angle)
+            val width = pict.width
+            val height = pict.height
+            val centerX = width / 2.0
+            val centerY = height / 2.0
 
-            var maxiX = Double.NEGATIVE_INFINITY
-            var miniX = Double.POSITIVE_INFINITY
-            var maxiY = Double.NEGATIVE_INFINITY
-            var miniY = Double.POSITIVE_INFINITY
+            val corners = arrayOf(
+                doubleArrayOf(-centerX, -centerY),
+                doubleArrayOf(centerX, -centerY),
+                doubleArrayOf(-centerX, centerY),
+                doubleArrayOf(centerX, centerY)
+            )
 
-
-            for (i in 0 until height) {
-                for (j in 0 until width) {
-                    var newX =
-                        (i - centerY) * cos(radianAngle) - (j - centerX) * sin(radianAngle) + centerX
-                    var newY =
-                        (j - centerX) * cos(radianAngle) + (i - centerY) * sin(radianAngle) + centerY
-                    maxiX = maxOf(newX, maxiX)
-                    maxiY = maxOf(newY, maxiY)
-                    miniX = minOf(newX, miniX)
-                    miniY = minOf(newY, miniY)
-                }
+            val newCorners = corners.map { (x, y) ->
+                val newX = x * cos(radianAngle) - y * sin(radianAngle)
+                val newY = x * sin(radianAngle) + y * cos(radianAngle)
+                doubleArrayOf(newX, newY)
             }
 
+            val xs = newCorners.map { it[0] }
+            val ys = newCorners.map { it[1] }
 
-            var newWidth = (maxiX - miniX).toInt()
-            var newHeight = (maxiY - miniY).toInt()
+            val newWidth = ceil(xs.maxOrNull()!! - xs.minOrNull()!!).toInt()
+            val newHeight = ceil(ys.maxOrNull()!! - ys.minOrNull()!!).toInt()
 
-            var outputBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888)
+            val outputBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888)
+            val newCenterX = newWidth / 2.0
+            val newCenterY = newHeight / 2.0
+
 
             for (newX in 0 until newWidth) {
                 for (newY in 0 until newHeight) {
-                    var originalX =
-                        ((newX + miniX - centerX) * cos(radianAngle) + (newY + miniY - centerY) * sin(
-                            radianAngle
-                        ) + centerX).toInt()
-                    var originalY =
-                        ((newY + miniY - centerY) * cos(radianAngle) - (newX + miniX - centerX) * sin(
-                            radianAngle
-                        ) + centerY).toInt()
+                    val originalX = ((newX - newCenterX) * cos(-radianAngle) - (newY - newCenterY) * sin(-radianAngle) + centerX).toInt()
+                    val originalY = ((newX - newCenterX) * sin(-radianAngle) + (newY - newCenterY) * cos(-radianAngle) + centerY).toInt()
 
                     if (originalX in 0 until width && originalY in 0 until height) {
                         outputBitmap.setPixel(newX, newY, pict.getPixel(originalX, originalY))
-                    }
-                    else {
-                        outputBitmap.eraseColor(Color.BLACK)
+                    } else {
+                        outputBitmap.setPixel(newX, newY, Color.TRANSPARENT)
                     }
                 }
             }
 
-            return@withContext outputBitmap;
+            return@withContext outputBitmap
         }
 }

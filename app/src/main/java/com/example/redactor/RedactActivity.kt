@@ -1,6 +1,5 @@
 package com.example.redactor
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -8,13 +7,9 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,14 +20,9 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.redactor.actions.Save
 import com.example.redactor.algorithms.Filters
-import com.example.redactor.algorithms.Masking
 import com.example.redactor.algorithms.Rotate
 import com.example.redactor.databinding.ActivityRedactBinding
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 
 class RedactActivity : AppCompatActivity() {
@@ -40,7 +30,7 @@ class RedactActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRedactBinding
     val rotate = Rotate();
     val filers = Filters();
-    val ma = Masking();
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -191,11 +181,12 @@ class RedactActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 lifecycleScope.launch {
+                    val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
                     val rotatedBitmap = rotate.rotatePicture(
-                        (binding.imagePreview.drawable as BitmapDrawable).bitmap,
+                        originalPhoto,
                     seekBar.progress.toDouble()
                     )
-                    binding.imagePreview.setImageBitmap(rotatedBitmap)
+                    binding.imagePreview.setImageBitmap(rotatedBitmap);
                 }
             }
         })
@@ -224,8 +215,34 @@ class RedactActivity : AppCompatActivity() {
 
             override fun onStartTrackingTouch(secondSeekBar: SeekBar) { }
 
-            override fun onStopTrackingTouch(secondSeekBar: SeekBar) {
+            override fun onStopTrackingTouch(secondSeekBar: SeekBar) { }
+        })
+    }
+
+    public fun seekBarUnsharpMasking(firstSeekBar: SeekBar, firstText: TextView, secondSeekBar: SeekBar, secondText: TextView){
+        firstSeekBar.min = 2;
+        firstSeekBar.max = 15;
+        secondSeekBar.min = 1;
+        secondSeekBar.max = 15;
+
+        firstSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(firstSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                firstText.text = "Radius: ${progress.toString()}"
             }
+
+            override fun onStartTrackingTouch(firstSeekBar: SeekBar) { }
+
+            override fun onStopTrackingTouch(firstSeekBar: SeekBar) { }
+        })
+
+        secondSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(secondSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                secondText.text = "Degree: ${progress.toString()}"
+            }
+
+            override fun onStartTrackingTouch(secondSeekBar: SeekBar) { }
+
+            override fun onStopTrackingTouch(secondSeekBar: SeekBar) { }
         })
     }
 
