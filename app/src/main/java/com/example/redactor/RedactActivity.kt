@@ -155,6 +155,8 @@ class RedactActivity : AppCompatActivity() {
 
         val filterCarousel : RecyclerView = findViewById(R.id.filterRecycler)
 
+//        ggg
+
         val filterAdapter = AlgorithmsAdapter(listFilters, this)
         filterCarousel.adapter = filterAdapter
 
