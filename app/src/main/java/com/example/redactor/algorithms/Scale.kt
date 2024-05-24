@@ -5,14 +5,12 @@ import android.graphics.Color
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class Scale {
 
-    private fun gaussian(inputBitmap: Bitmap, radius: Int) : Bitmap
-    {
+class Scale {
+    private fun gaussian(inputBitmap: Bitmap, radius: Int): Bitmap {
         val width = inputBitmap.width
         val height = inputBitmap.height
-        val blurredBitmap : Bitmap = Bitmap.createBitmap(width, height,
-            Bitmap.Config.ARGB_8888)
+        val blurredBitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
         for (x in 0 until width) {
             for (y in 0 until height) {
@@ -46,90 +44,51 @@ class Scale {
     }
 
 
-    public suspend fun imageScalling( bitmap: Bitmap,  k : Double ) : Bitmap =
-        withContext(Dispatchers.Default)
-    {
+    public suspend fun imageScalling(bitmap: Bitmap, k: Double): Bitmap =
+        withContext(Dispatchers.Default) {
 
-        if ( k  < 1.0)
-        {
+        if (k < 1f) {
             return@withContext trillenarInterpolation(bitmap, k)
         }
 
-        return@withContext bilinearInterpolation(bitmap, k)
+        return@withContext BilinearInterpolation(bitmap, k)
     }
 
-    private fun bilinearInterpolation(bitmap: Bitmap, k : Double) : Bitmap
-    {
-        val NewWidth  = (bitmap.width * k).toInt()
+    private fun blend(firstSlice: Int, point2: Int, ds: Float): Int {
+        val q = 1 - ds
+        val qual = (Color.alpha(firstSlice) * q + Color.alpha(point2) * ds).toInt()
+        val red = (Color.red(firstSlice) * q + Color.red(point2) * ds).toInt()
+        val green = (Color.green(firstSlice) * q + Color.green(point2) * ds).toInt()
+        val blue = (Color.blue(firstSlice) * q + Color.blue(point2) * ds).toInt()
+
+        return Color.argb(qual, red, green, blue)
+    }
+
+    private fun Interpolation(
+        point1: Int, point2: Int, point3: Int, point4: Int,
+        dx: Float, dy: Float
+    ): Int {
+        val firstSlice = blend(point3, point4, dx)
+        val secondSlice = blend(point1, point2, dx)
+
+        return blend(firstSlice, secondSlice, dy)
+    }
+
+
+    private fun BilinearInterpolation(bitmap: Bitmap, k: Double): Bitmap {
+        val NewWidth = (bitmap.width * k).toInt()
         val NewHeight = (bitmap.height * k).toInt()
-        val ScaledBitmap = Bitmap.createBitmap(NewWidth, NewHeight,
-            Bitmap.Config.ARGB_8888)
 
-        for (x in 0 until NewWidth)
-        {
-            for (y in 0 until NewHeight)
-            {
+        val ScaledBitmap = Bitmap.createBitmap(NewWidth, NewHeight, Bitmap.Config.ARGB_8888)
 
-                val X = (x / k)
-                val Y = (y / k)
+        val scaleX = bitmap.width / NewWidth.toFloat()
+        val scaleY = bitmap.height / NewHeight.toFloat()
 
-                val x1 = X.toInt()
-                val y1 = Y.toInt()
+        for (x in 0 until NewWidth) {
+            for (y in 0 until NewHeight) {
 
-                val x2 = if (x1 + 1 < bitmap.width ) x1 + 1 else x1
-                val y2 = if (y1 + 1 < bitmap.height ) y1 + 1 else y1
-
-                val p1 = bitmap.getPixel(x1, y1)
-                val p2 = bitmap.getPixel(x2, y1)
-                val p3 = bitmap.getPixel(x1, y2)
-                val p4 = bitmap.getPixel(x2, y2)
-
-                val x3 = X - x1
-                val y3 = Y - y1
-
-                val red1 = (1 - x3) * (1 - y3) * Color.red(p1)
-                val red2 = x3 * (1 - y3) * Color.red(p2)
-                val red3 = (1 - x3) * y3 * Color.red(p3)
-                val red4 = x3 * y3 * Color.red(p4)
-
-                val red = (red1 + red2 + red3 + red4)
-
-                val green1 = (1 - x3) * (1 - y3) * Color.green(p1)
-                val green2 = x3 * (1 - y3) * Color.green(p2)
-                val green3 =  (1 - x3) * y3 * Color.green(p3)
-                val green4 = x3 * y3 * Color.green(p4)
-
-                val green = (green1 + green2 + green3 + green4)
-
-                val blue1 = (1 - x3) * (1 - y3) * Color.blue(p1)
-                val blue2 = x3 * (1 - y3) * Color.blue(p2)
-                val blue3 =  (1 - x3) * y3 * Color.blue(p3)
-                val blue4 = x3 * y3 * Color.blue(p4)
-
-                val blue = (blue1 + blue2 + blue3 + blue4)
-
-                ScaledBitmap.setPixel(x, y, Color.rgb(red.toInt(), green.toInt(), blue.toInt())
-                )
-            }
-        }
-
-        return ScaledBitmap
-    }
-
-
-    private fun trillenarInterpolation(bitmap: Bitmap, k: Double): Bitmap
-    {
-        val newWidth = (bitmap.width * k).toInt()
-        val newHeight = (bitmap.height * k).toInt()
-        val scaledBitmap = Bitmap.createBitmap(newWidth, newHeight,
-            Bitmap.Config.ARGB_8888)
-
-        for (x in 0 until newWidth)
-        {
-            for (y in 0 until newHeight)
-            {
-                val X = x / k
-                val Y = y / k
+                val X = (x * scaleX)
+                val Y = (y * scaleY)
 
                 val x1 = X.toInt()
                 val y1 = Y.toInt()
@@ -142,30 +101,67 @@ class Scale {
                 val p3 = bitmap.getPixel(x1, y2)
                 val p4 = bitmap.getPixel(x2, y2)
 
-                val fx = X - x1
-                val fy = Y - y1
+                val x3 = X - x1
+                val y3 = Y - y1
 
 
-                val red1 = (1 - fx) * Color.red(p1) + fx * Color.red(p2)
-                val red2 = (1 - fx) * Color.red(p3) + fx * Color.red(p4)
 
-                val green1 = (1 - fx) * Color.green(p1) + fx * Color.green(p2)
-                val green2 = (1 - fx) * Color.green(p3) + fx * Color.green(p4)
-
-                val blue1 = (1 - fx) * Color.blue(p1) + fx * Color.blue(p2)
-                val blue2 = (1 - fx) * Color.blue(p3) + fx * Color.blue(p4)
-
-                val blue = (1 - fy) * blue1 + fy * blue2
-                val green = (1 - fy) * green1 + fy * green2
-                val red = (1 - fy) * red1 + fy * red2
-
-                scaledBitmap.setPixel(x, y, Color.rgb(red.toInt(), green.toInt(), blue.toInt())
-                )
+                ScaledBitmap.setPixel(x, y, Interpolation(p1, p2, p3, p4, x3, y3))
             }
         }
 
-        gaussian(scaledBitmap, 100)
-        return scaledBitmap
+        return ScaledBitmap
     }
 
+
+    private fun trillenarInterpolation(bitmap: Bitmap, k: Double): Bitmap {
+        val newWidth = (bitmap.width * k).toInt()
+        val newHeight = (bitmap.height * k).toInt()
+
+        val scaleX = bitmap.width / newWidth.toFloat()
+        val scaleY = bitmap.height / newHeight.toFloat()
+
+        val scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888)
+
+        for (x in 0 until newWidth) {
+            for (y in 0 until newHeight) {
+                val X = x * scaleX
+                val Y = y * scaleY
+
+                val x1 = X.toInt()
+                val y1 = Y.toInt()
+
+                val x2 = if (x1 + 1 < bitmap.width) x1 + 1 else x1
+                val y2 = if (y1 + 1 < bitmap.height) y1 + 1 else y1
+
+                val x3 = if (x1 > 0) x1 - 1 else x1
+                val y3 = if (y1 > 0) y1 - 1 else y1
+
+                val dx = X - x1;
+                val dy = Y - y1;
+
+                val p1 = bitmap.getPixel(x1, y1)
+                val p2 = bitmap.getPixel(x2, y1)
+                val p3 = bitmap.getPixel(x1, y2)
+                val p4 = bitmap.getPixel(x2, y2)
+
+                val p5 = bitmap.getPixel(x3, y2)
+                val p6 = bitmap.getPixel(x3, y1)
+                val p7 = bitmap.getPixel(x3, y3)
+                val p8 = bitmap.getPixel(x1, y3)
+
+
+                val slice1 = Interpolation(p1, p2, p3, p4, dx, dy)
+                val slice2 = Interpolation(p5, p6, p7, p8, dx, dy)
+
+                scaledBitmap.setPixel(x, y, blend(slice1, slice2, 1f))
+            }
+        }
+
+        return gaussian(scaledBitmap, 2)
+    }
+
+
 }
+
+

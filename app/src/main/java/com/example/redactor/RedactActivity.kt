@@ -6,14 +6,17 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.ViewCompat
@@ -81,7 +84,7 @@ class RedactActivity : AppCompatActivity() {
             ItemBlock(R.drawable.baseline_crop_rotate_24, "Поворот"),
             ItemBlock(R.drawable.baseline_filter_24, "Фильтры"),
             ItemBlock(R.drawable.baseline_add_24, "Маскировка"),
-            ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Ретушь"),
+            ItemBlock(R.drawable.baseline_retush_24, "Ретушь"),
             ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Масштаб"),
 
         )
@@ -108,6 +111,7 @@ class RedactActivity : AppCompatActivity() {
             override fun onItemClick(position: Int, item: Int) {
                 when (position){
                     0->{
+                        btnOfUnsharp()
                         recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
@@ -115,17 +119,20 @@ class RedactActivity : AppCompatActivity() {
                         seekBarRotate(firstSeekBar, firstText)
                     }
                     1->{
+                        btnOfUnsharp()
                         seekOffFirstBar()
                         seekOffSecondBar()
                         recyclerOn()
                     }
                     2->{
+                        btnOnUnsharp()
                         recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
                         seekOnSecondBar()
                     }
                     3->{
+                        btnOfUnsharp()
                         recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
@@ -134,6 +141,7 @@ class RedactActivity : AppCompatActivity() {
                         seekBarRetouch(firstSeekBar, firstText, secondSeekBar, secondText)
                     }
                     4->{
+                        btnOfUnsharp()
                         recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
@@ -291,7 +299,8 @@ class RedactActivity : AppCompatActivity() {
     }
 
 
-    public fun seekBarUnsharpMasking(firstSeekBar: SeekBar, firstText: TextView, secondSeekBar: SeekBar, secondText: TextView){
+    @RequiresApi(Build.VERSION_CODES.O)
+    public fun seekBarUnsharpMasking(firstSeekBar: SeekBar, firstText: TextView, secondSeekBar: SeekBar, secondText: TextView, button: Button){
         firstSeekBar.min = 2;
         firstSeekBar.max = 15;
         secondSeekBar.min = 1;
@@ -309,13 +318,25 @@ class RedactActivity : AppCompatActivity() {
 
         secondSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(secondSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                secondText.text = "Degree: ${progress.toString()}"
+                secondText.text = "Ratio: ${progress.toString()}"
             }
 
             override fun onStartTrackingTouch(secondSeekBar: SeekBar) { }
 
             override fun onStopTrackingTouch(secondSeekBar: SeekBar) { }
         })
+
+        val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
+        button.setOnClickListener {
+            lifecycleScope.launch {
+                val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
+                val answerBitmap = mask.unsharpMasking(
+                    originalPhoto,
+                    firstSeekBar.progress, secondSeekBar.progress.toFloat()
+                )
+                binding.imagePreview.setImageBitmap(answerBitmap);
+            }
+        }
     }
 
     public fun seekBarScale(firstSeekBar: SeekBar, firstText: TextView){
@@ -392,5 +413,17 @@ class RedactActivity : AppCompatActivity() {
     public fun recycerOff(){
         val recyc: RecyclerView = findViewById(R.id.filterRecycler)
         recyc.visibility = View.INVISIBLE
+    }
+
+    public fun btnOnUnsharp(){
+        val btn: Button = findViewById(R.id.firstButton)
+        btn.visibility = View.VISIBLE
+        btn.text = "Запуск"
+    }
+
+    public fun btnOfUnsharp(){
+        val btn: Button = findViewById(R.id.firstButton)
+        btn.visibility = View.INVISIBLE
+        btn.text = ""
     }
 }

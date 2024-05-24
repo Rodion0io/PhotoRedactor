@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class UnsharpMasking {
 
@@ -47,7 +49,8 @@ class UnsharpMasking {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    public fun unsharpMasking(inputBitmap: Bitmap, radius: Int, amount: Float): Bitmap {
+    public suspend fun unsharpMasking(inputBitmap: Bitmap, radius: Int, amount: Float): Bitmap =
+        withContext(Dispatchers.Default) {
 
         val blurredBitmap = Gaussian(inputBitmap , radius)
 
@@ -70,17 +73,18 @@ class UnsharpMasking {
                 val Green = green * amount
                 val Blue = blue * amount
 
-                val enhancedMaskPixel = Color.rgb(Red, Green, Blue)
 
-                val newR = (Color.red(originalPixel) + Color.red(enhancedMaskPixel)).coerceIn(0, 255)
-                val newG = (Color.green(originalPixel) + Color.green(enhancedMaskPixel)).coerceIn(0, 255)
-                val newB = (Color.blue(originalPixel) + Color.blue(enhancedMaskPixel)).coerceIn(0, 255)
+                val enhancedMaskPixel = Color.rgb( Red.toInt(), Green.toInt(), Blue.toInt() )
+
+                val newR = (Color.red(originalPixel) + Color.red(enhancedMaskPixel))
+                val newG = (Color.green(originalPixel) + Color.green(enhancedMaskPixel))
+                val newB = (Color.blue(originalPixel) + Color.blue(enhancedMaskPixel))
                 outputBitmap.setPixel(x, y, Color.rgb(newR, newG, newB))
 
             }
         }
 
 
-        return outputBitmap
+        return@withContext outputBitmap
     }
 }
