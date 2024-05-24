@@ -1,17 +1,21 @@
 package com.example.redactor
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -25,7 +29,9 @@ import com.example.redactor.algorithms.Rotate
 import com.example.redactor.algorithms.Scale
 import com.example.redactor.algorithms.UnsharpMasking
 import com.example.redactor.databinding.ActivityRedactBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RedactActivity : AppCompatActivity() {
 
@@ -116,8 +122,9 @@ class RedactActivity : AppCompatActivity() {
                     3->{
                         seekOffFirstBar()
                         seekOffSecondBar()
+                        seekOnFirstBar()
                         seekOnSecondBar()
-                        seekBarRetuch(firstSeekBar, firstText, secondSeekBar, secondText)
+                        seekBarRetouch(firstSeekBar, firstText, secondSeekBar, secondText)
                     }
                     4->{
                         seekOffFirstBar()
@@ -154,32 +161,75 @@ class RedactActivity : AppCompatActivity() {
         })
     }
 
-    public fun seekBarRetuch(firstSeekBar: SeekBar, firstText: TextView, secondSeekBar: SeekBar, secondText: TextView){
-        firstSeekBar.min = 0;
-        firstSeekBar.max = 50;
-        secondSeekBar.min = 0;
+    @SuppressLint("ClickableViewAccessibility")
+    public fun seekBarRetouch(firstSeekBar: SeekBar, firstText: TextView, secondSeekBar: SeekBar, secondText: TextView) {
+        firstSeekBar.min = 0
+        firstSeekBar.max = 50
+        secondSeekBar.min = 0
         secondSeekBar.max = 50
 
         firstSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(firstSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                firstText.text = "Radius: ${progress.toString()}"
+                firstText.text = "Radius: ${progress}"
             }
 
-            override fun onStartTrackingTouch(firstSeekBar: SeekBar) { }
+            override fun onStartTrackingTouch(firstSeekBar: SeekBar) {}
 
-            override fun onStopTrackingTouch(firstSeekBar: SeekBar) { }
+            override fun onStopTrackingTouch(firstSeekBar: SeekBar) {}
         })
 
         secondSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(secondSeekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                secondText.text = "Ratio: ${progress.toString()}"
+                secondText.text = "Ratio: ${progress}"
             }
 
-            override fun onStartTrackingTouch(secondSeekBar: SeekBar) { }
+            override fun onStartTrackingTouch(secondSeekBar: SeekBar) {}
 
-            override fun onStopTrackingTouch(secondSeekBar: SeekBar) { }
+            override fun onStopTrackingTouch(secondSeekBar: SeekBar) {}
         })
+
+
+
+        binding.imagePreview.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_MOVE -> {
+                    val imageView = v as ImageView
+                    val drawable = imageView.drawable as? BitmapDrawable
+                    drawable?.bitmap?.let { bitmap ->
+                        // Ensure the bitmap is mutable
+                        val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+                        val x = event.x
+                        val y = event.y
+
+                        val ratioX = mutableBitmap.width / imageView.width.toFloat()
+                        val ratioY = mutableBitmap.height / imageView.height.toFloat()
+
+                        val touchX = (x * ratioX).toInt().coerceIn(0, mutableBitmap.width - 1)
+                        val touchY = (y * ratioY).toInt().coerceIn(0, mutableBitmap.height - 1)
+
+                        lifecycleScope.launch {
+                            val radius = firstSeekBar.progress.toDouble()
+                            val ratioRetouch = secondSeekBar.progress
+
+                            // Perform the retouch
+                            val retouchedBitmap = withContext(Dispatchers.Default) {
+                                retuch.retush(mutableBitmap, touchX.toDouble(), touchY.toDouble(), radius, ratioRetouch)
+                            }
+
+                            // Update the ImageView on the main thread
+                            withContext(Dispatchers.Main) {
+                                binding.imagePreview.setImageBitmap(retouchedBitmap)
+                            }
+                        }
+                    }
+                }
+            }
+            true
+        }
+
     }
+
 
     public fun seekBarUnsharpMasking(firstSeekBar: SeekBar, firstText: TextView, secondSeekBar: SeekBar, secondText: TextView){
         firstSeekBar.min = 2;
@@ -222,7 +272,7 @@ class RedactActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(firstSeekBar: SeekBar) {
                 lifecycleScope.launch {
                     val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
-                    val scaleBitmap = scale.ImageScalling(
+                    val scaleBitmap = scale.imageScalling(
                         originalPhoto,
                         firstSeekBar.progress.toDouble()
                     )
