@@ -37,6 +37,7 @@ class RedactActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRedactBinding
     val rotate = Rotate();
+    val filers = Filters();
     val mask = UnsharpMasking();
     val retuch = Retouching();
     val scale = Scale();
@@ -81,7 +82,8 @@ class RedactActivity : AppCompatActivity() {
             ItemBlock(R.drawable.baseline_filter_24, "Фильтры"),
             ItemBlock(R.drawable.baseline_add_24, "Маскировка"),
             ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Ретушь"),
-            ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Масштаб")
+            ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Масштаб"),
+
         )
 
         val firstSeekBar: SeekBar = findViewById(R.id.seekBar1)
@@ -101,10 +103,12 @@ class RedactActivity : AppCompatActivity() {
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(carousel)
 
+
         adapter.listner = object: AlgorithmsAdapter.OnItemClickListener{
             override fun onItemClick(position: Int, item: Int) {
                 when (position){
                     0->{
+                        recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
                         seekOnFirstBar()
@@ -113,13 +117,16 @@ class RedactActivity : AppCompatActivity() {
                     1->{
                         seekOffFirstBar()
                         seekOffSecondBar()
+                        recyclerOn()
                     }
                     2->{
+                        recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
                         seekOnSecondBar()
                     }
                     3->{
+                        recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
                         seekOnFirstBar()
@@ -127,6 +134,7 @@ class RedactActivity : AppCompatActivity() {
                         seekBarRetouch(firstSeekBar, firstText, secondSeekBar, secondText)
                     }
                     4->{
+                        recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
                         seekOnFirstBar()
@@ -136,7 +144,60 @@ class RedactActivity : AppCompatActivity() {
             }
         }
 
+        val listFilters : List<ItemBlock> = listOf(
+            ItemBlock(R.drawable.red_filter, "Красный"),
+            ItemBlock(R.drawable.green_filter, "Зеленый"),
+            ItemBlock(R.drawable.blue_filter, "Синий"),
+            ItemBlock(R.drawable.mosaic_filter, "Мозаика"),
+            ItemBlock(R.drawable.mirroring_filter, "отзеркал."),
+            ItemBlock(R.drawable.negative_filter, "Негатив")
+        )
+
+        val filterCarousel : RecyclerView = findViewById(R.id.filterRecycler)
+
+        val filterAdapter = AlgorithmsAdapter(listFilters, this)
+        filterCarousel.adapter = filterAdapter
+
+//        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        filterCarousel.layoutManager = layoutManager
+//        layoutManager.scrollToPositionWithOffset(0, resources.displayMetrics.widthPixels / 2)
+
+//        val snapHelperr = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(filterCarousel)
+
+//        filterAdapter.listner = object: FiltersAdapter.OnItemClickListener{
+//            override fun onItemClick(position: Int, item: Int) {
+//                when (position){
+//                    0->{
+//                        val red = filers.redImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+//                        binding.imagePreview.setImageBitmap(red)
+//                    }
+//                    1->{
+//                        val green = filers.greenImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+//                        binding.imagePreview.setImageBitmap(green)
+//                    }
+//                    2->{
+//                        val blue = filers.blueImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+//                        binding.imagePreview.setImageBitmap(blue)
+//                    }
+//                    3->{
+//                        val mosaic = filers.mosaicImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+//                        binding.imagePreview.setImageBitmap(mosaic)
+//                    }
+//                    4->{
+//                        val mirror = filers.mirrorImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+//                        binding.imagePreview.setImageBitmap(mirror)
+//                    }
+//                    5->{
+//                        val negative = filers.negativeImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+//                        binding.imagePreview.setImageBitmap(negative)
+//                    }
+//                }
+//            }
+//        }
+
     }
+
 
     public fun seekBarRotate(seekBar: SeekBar, text: TextView){
         seekBar.min = -180;
@@ -226,8 +287,6 @@ class RedactActivity : AppCompatActivity() {
             }
             true
         }
-
-
     }
 
 
@@ -324,4 +383,13 @@ class RedactActivity : AppCompatActivity() {
         textSetting.visibility = View.INVISIBLE
     }
 
+    public fun recyclerOn(){
+        val recyc: RecyclerView = findViewById(R.id.filterRecycler)
+        recyc.visibility = View.VISIBLE
+    }
+
+    public fun recycerOff(){
+        val recyc: RecyclerView = findViewById(R.id.filterRecycler)
+        recyc.visibility = View.INVISIBLE
+    }
 }

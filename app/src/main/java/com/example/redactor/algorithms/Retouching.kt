@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+
 class Retouching {
 
     private fun checkIncludeCircle(centerX: Double, centerY: Double, pointX: Double, pointY: Double, radius: Double): Boolean {
@@ -27,10 +28,10 @@ class Retouching {
             val centerYInt = centerY.toInt()
             val radiusInt = radius.toInt()
 
-            val firstPointX = centerXInt - radiusInt
-            val firstPointY = centerYInt - radiusInt
-            val secondPointX = centerXInt + radiusInt
-            val secondPointY = centerYInt + radiusInt
+            val firstPointX = maxOf(centerXInt - radiusInt, 0)
+            val firstPointY = maxOf(centerYInt - radiusInt, 0)
+            val secondPointX = minOf(centerXInt + radiusInt, photo.width - 1)
+            val secondPointY = minOf(centerYInt + radiusInt, photo.height - 1)
 
             var summRed = 0
             var summGreen = 0
@@ -38,7 +39,7 @@ class Retouching {
             var summAlpha = 0
             var count = 0
 
-            // Вычисляем средние значения цветов в области ретуширования
+            // Calculate average color values within the retouching area
             for (i in firstPointX..secondPointX) {
                 for (j in firstPointY..secondPointY) {
                     if (checkIncludeCircle(centerX, centerY, i.toDouble(), j.toDouble(), radius)) {
@@ -57,7 +58,7 @@ class Retouching {
             val averageBlue: Int = (summBlue / count)
             val averageAlpha : Int = (summAlpha / count)
 
-            // Проходим по каждому пикселю в области ретуширования и применяем ретуширование с сохранением распределения цветов
+            // Apply retouching to each pixel within the retouching area while preserving the color distribution
             for (i in firstPointX..secondPointX) {
                 for (j in firstPointY..secondPointY) {
                     if (checkIncludeCircle(centerX, centerY, i.toDouble(), j.toDouble(), radius)) {
@@ -65,7 +66,7 @@ class Retouching {
                         val distance = distance(i.toDouble(), j.toDouble(), centerX, centerY)
                         val retouchStrength = (1 - distance / radius) * ratioRetuch
 
-                        // Коэффициент сохранения распределения цветов
+                        // Coefficient for preserving color distribution
                         val preserveCoefficient = 1.0 - (1.0 - retouchStrength / ratioRetuch)
 
                         val newRed = (Color.red(pixel) + (averageRed - Color.red(pixel)) * preserveCoefficient).coerceIn(0.0,255.0)
@@ -81,3 +82,4 @@ class Retouching {
             return@withContext photo
         }
 }
+
