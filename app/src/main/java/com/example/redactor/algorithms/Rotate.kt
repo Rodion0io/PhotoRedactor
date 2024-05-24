@@ -46,7 +46,7 @@ class Rotate {
             for (newX in 0 until newWidth) {
                 for (newY in 0 until newHeight) {
                     val originalX = ((newX - newCenterX) * cos(-radianAngle) - (newY - newCenterY) * sin(-radianAngle) + centerX).toInt()
-                    val originalY = ((newX - newCenterX) * sin(-radianAngle) + (newY - newCenterY) * cos(-radianAngle) + centerY).toInt()
+                    val originalY   = ((newX - newCenterX) * sin(-radianAngle) + (newY - newCenterY) * cos(-radianAngle) + centerY).toInt()
 
                     if (originalX in 0 until width && originalY in 0 until height) {
                         outputBitmap.setPixel(newX, newY, pict.getPixel(originalX, originalY))

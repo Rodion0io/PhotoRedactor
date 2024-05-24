@@ -80,8 +80,4 @@ class Retouching {
             }
             return@withContext photo
         }
-
-
-
-
 }

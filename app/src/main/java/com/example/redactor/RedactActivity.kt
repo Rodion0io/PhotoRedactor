@@ -188,8 +188,6 @@ class RedactActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(secondSeekBar: SeekBar) {}
         })
 
-
-
         binding.imagePreview.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_MOVE -> {
@@ -205,6 +203,7 @@ class RedactActivity : AppCompatActivity() {
                         val ratioX = mutableBitmap.width / imageView.width.toFloat()
                         val ratioY = mutableBitmap.height / imageView.height.toFloat()
 
+                        // Adjust for touch inaccuracies by considering the touch area relative to the bitmap
                         val touchX = (x * ratioX).toInt().coerceIn(0, mutableBitmap.width - 1)
                         val touchY = (y * ratioY).toInt().coerceIn(0, mutableBitmap.height - 1)
 
@@ -227,6 +226,7 @@ class RedactActivity : AppCompatActivity() {
             }
             true
         }
+
 
     }
 
@@ -301,9 +301,11 @@ class RedactActivity : AppCompatActivity() {
 
     public fun seekOffFirstBar(){
         val seek: SeekBar = findViewById(R.id.seekBar1)
-        val testSetting: TextView = findViewById(R.id.firstText)
+        val textSetting: TextView = findViewById(R.id.firstText)
         seek.visibility = View.INVISIBLE
-        testSetting.visibility = View.INVISIBLE
+        seek.progress = seek.min
+        textSetting.text = ""
+        textSetting.visibility = View.INVISIBLE
     }
 
     public fun seekOnSecondBar() {
@@ -315,9 +317,11 @@ class RedactActivity : AppCompatActivity() {
 
     public fun seekOffSecondBar(){
         val seek: SeekBar = findViewById(R.id.seekBar2)
-        val testSetting: TextView = findViewById(R.id.secondText)
+        val textSetting: TextView = findViewById(R.id.secondText)
         seek.visibility = View.INVISIBLE
-        testSetting.visibility = View.INVISIBLE
+        seek.progress = seek.min
+        textSetting.text = ""
+        textSetting.visibility = View.INVISIBLE
     }
 
 }
