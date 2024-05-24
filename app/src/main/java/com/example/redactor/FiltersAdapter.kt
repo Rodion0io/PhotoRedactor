@@ -18,7 +18,7 @@ class FiltersAdapter (private var photos: List<ItemBlock>, private var activity:
     var listner: OnItemClickListener? = null;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FiltersAdapter.AlgorithmsViewHolder {
-        val viewshka = LayoutInflater.from(parent.context).inflate(R.layout.item_icon, parent, false);
+        val viewshka = LayoutInflater.from(parent.context).inflate(R.layout.item_filters, parent, false);
         return AlgorithmsViewHolder(viewshka);
     }
 

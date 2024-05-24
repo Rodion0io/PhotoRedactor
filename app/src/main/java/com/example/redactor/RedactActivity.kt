@@ -155,48 +155,47 @@ class RedactActivity : AppCompatActivity() {
 
         val filterCarousel : RecyclerView = findViewById(R.id.filterRecycler)
 
-//        ggg
-
         val filterAdapter = AlgorithmsAdapter(listFilters, this)
         filterCarousel.adapter = filterAdapter
 
-//        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        filterCarousel.layoutManager = layoutManager
-//        layoutManager.scrollToPositionWithOffset(0, resources.displayMetrics.widthPixels / 2)
+        val layoutManagerr = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        filterCarousel.layoutManager = layoutManagerr
+        layoutManagerr.scrollToPositionWithOffset(0, resources.displayMetrics.widthPixels / 2)
 
-//        val snapHelperr = LinearSnapHelper()
-        snapHelper.attachToRecyclerView(filterCarousel)
+        val snapHelperr = LinearSnapHelper()
+        snapHelperr.attachToRecyclerView(filterCarousel)
 
-//        filterAdapter.listner = object: FiltersAdapter.OnItemClickListener{
-//            override fun onItemClick(position: Int, item: Int) {
-//                when (position){
-//                    0->{
-//                        val red = filers.redImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//                        binding.imagePreview.setImageBitmap(red)
-//                    }
-//                    1->{
-//                        val green = filers.greenImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//                        binding.imagePreview.setImageBitmap(green)
-//                    }
-//                    2->{
-//                        val blue = filers.blueImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//                        binding.imagePreview.setImageBitmap(blue)
-//                    }
-//                    3->{
-//                        val mosaic = filers.mosaicImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//                        binding.imagePreview.setImageBitmap(mosaic)
-//                    }
-//                    4->{
-//                        val mirror = filers.mirrorImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//                        binding.imagePreview.setImageBitmap(mirror)
-//                    }
-//                    5->{
-//                        val negative = filers.negativeImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
-//                        binding.imagePreview.setImageBitmap(negative)
-//                    }
-//                }
-//            }
-//        }
+        filterAdapter.listner = object: FiltersAdapter.OnItemClickListener,
+            AlgorithmsAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int, item: Int) {
+                when (position){
+                    0->{
+                        val red = filers.redImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                        binding.imagePreview.setImageBitmap(red)
+                    }
+                    1->{
+                        val green = filers.greenImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                        binding.imagePreview.setImageBitmap(green)
+                    }
+                    2->{
+                        val blue = filers.blueImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                        binding.imagePreview.setImageBitmap(blue)
+                    }
+                    3->{
+                        val mosaic = filers.mosaicImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                        binding.imagePreview.setImageBitmap(mosaic)
+                    }
+                    4->{
+                        val mirror = filers.mirrorImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                        binding.imagePreview.setImageBitmap(mirror)
+                    }
+                    5->{
+                        val negative = filers.negativeImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                        binding.imagePreview.setImageBitmap(negative)
+                    }
+                }
+            }
+        }
 
     }
 
