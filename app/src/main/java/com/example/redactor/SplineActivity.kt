@@ -107,8 +107,10 @@ class SplineActivity : AppCompatActivity() {
         }
 
         fun makeSplines() {
-            switch = !switch;
-            invalidate()
+            if(points.count() >0 ) {
+                switch = !switch;
+                invalidate()
+            }
         }
 
 
