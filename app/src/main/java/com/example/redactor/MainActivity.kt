@@ -54,22 +54,43 @@ class MainActivity : AppCompatActivity() {
             File(cacheDir, FILENAME_TEMP)
         )
 
-        binding.secondBlock.setOnClickListener { takePictIntent() }
-        binding.firstBlock.setOnClickListener { openGallery() }
+        binding.secondBlock.setOnClickListener { checkCameraPermissionAndTakePicture() }
+        binding.firstBlock.setOnClickListener { checkStoragePermissionAndOpenGallery() }
         binding.toSpineButton.setOnClickListener {
             val action = Intent(this, SplineActivity::class.java)
             startActivity(action)
         }
     }
 
-    private fun openGallery() {
+    private fun checkStoragePermissionAndOpenGallery() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).also { pickerIntent ->
-                pickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                startActivityForResult(pickerIntent, REQUEST_CODE_PICK_IMAGE)
-            }
+            openGallery()
         } else {
             storagePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    private fun checkCameraPermissionAndTakePicture() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            takePictIntent()
+        } else {
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    private fun openGallery() {
+        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).also { pickerIntent ->
+            pickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            startActivityForResult(pickerIntent, REQUEST_CODE_PICK_IMAGE)
+        }
+    }
+
+    private fun takePictIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageTempUri)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
         }
     }
 
@@ -100,7 +121,8 @@ class MainActivity : AppCompatActivity() {
             if (isGranted) {
                 takePictIntent()
             } else {
-                Toast.makeText(this, "Camera permission denied. Please enable it in settings.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Camera permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
+                openAppPermissionSettings()
             }
         }
 
@@ -108,21 +130,16 @@ class MainActivity : AppCompatActivity() {
             if (isGranted) {
                 openGallery()
             } else {
-                Toast.makeText(this, "Storage permission denied. Please enable it in settings.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Storage permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
+                openAppPermissionSettings()
             }
         }
     }
 
-    private fun takePictIntent() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                takePictureIntent.resolveActivity(packageManager)?.also {
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageTempUri)
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                }
-            }
-        } else {
-            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+    private fun openAppPermissionSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", packageName, null)
         }
+        startActivity(intent)
     }
 }
