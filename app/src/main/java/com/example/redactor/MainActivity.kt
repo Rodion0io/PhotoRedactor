@@ -100,8 +100,7 @@ class MainActivity : AppCompatActivity() {
             if (isGranted) {
                 takePictIntent()
             } else {
-                Toast.makeText(this, "Camera permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
-                openAppPermissionSettings()
+                Toast.makeText(this, "Camera permission denied. Please enable it in settings.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -109,8 +108,7 @@ class MainActivity : AppCompatActivity() {
             if (isGranted) {
                 openGallery()
             } else {
-                Toast.makeText(this, "Storage permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
-                openAppPermissionSettings()
+                Toast.makeText(this, "Storage permission denied. Please enable it in settings.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -126,12 +124,5 @@ class MainActivity : AppCompatActivity() {
         } else {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
-    }
-
-    private fun openAppPermissionSettings() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", packageName, null)
-        }
-        startActivity(intent)
     }
 }
