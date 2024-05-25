@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
@@ -313,15 +314,25 @@ class RedactActivity : AppCompatActivity() {
                         // Ensure the bitmap is mutable
                         val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
-                        val x = event.x
-                        val y = event.y
+                        // Get the touch coordinates
+                        val touchX = event.x
+                        val touchY = event.y
 
-                        val ratioX = mutableBitmap.width / imageView.width.toFloat()
-                        val ratioY = mutableBitmap.height / imageView.height.toFloat()
+                        // Calculate the actual image scale and position within the ImageView
+                        val imageMatrixValues = FloatArray(9)
+                        imageView.imageMatrix.getValues(imageMatrixValues)
+                        val scaleX = imageMatrixValues[Matrix.MSCALE_X]
+                        val scaleY = imageMatrixValues[Matrix.MSCALE_Y]
+                        val translateX = imageMatrixValues[Matrix.MTRANS_X]
+                        val translateY = imageMatrixValues[Matrix.MTRANS_Y]
 
-                        // Adjust for touch inaccuracies by considering the touch area relative to the bitmap
-                        val touchX = (x * ratioX).toInt().coerceIn(0, mutableBitmap.width - 1)
-                        val touchY = (y * ratioY).toInt().coerceIn(0, mutableBitmap.height - 1)
+                        // Remove the translation component to get the actual bitmap coordinates
+                        val actualX = ((touchX - translateX) / scaleX).toInt()
+                        val actualY = ((touchY - translateY) / scaleY).toInt()
+
+                        // Ensure the coordinates are within the bitmap bounds
+                        val clampedX = actualX.coerceIn(0, mutableBitmap.width - 1)
+                        val clampedY = actualY.coerceIn(0, mutableBitmap.height - 1)
 
                         lifecycleScope.launch {
                             val radius = firstSeekBar.progress.toDouble()
@@ -331,8 +342,8 @@ class RedactActivity : AppCompatActivity() {
                             val retouchedBitmap = withContext(Dispatchers.Default) {
                                 retuch.retush(
                                     mutableBitmap,
-                                    touchX.toDouble(),
-                                    touchY.toDouble(),
+                                    clampedX.toDouble(),
+                                    clampedY.toDouble(),
                                     radius,
                                     ratioRetouch
                                 )
@@ -348,6 +359,7 @@ class RedactActivity : AppCompatActivity() {
             }
             true
         }
+
     }
 
 
