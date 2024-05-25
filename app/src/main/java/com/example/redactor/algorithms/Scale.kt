@@ -21,10 +21,10 @@ class Scale {
 
                 for (i in -radius until radius + 1) {
                     for (j in -radius until radius + 1) {
-                        val nx = x + i
-                        val ny = y + j
+                        var nx = x + i
+                        var ny = y + j
                         if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                            val pixel = inputBitmap.getPixel(nx, ny)
+                            var pixel = inputBitmap.getPixel(nx, ny)
                             rTotal += Color.red(pixel)
                             gTotal += Color.green(pixel)
                             bTotal += Color.blue(pixel)
@@ -33,9 +33,9 @@ class Scale {
                     }
                 }
 
-                val r = rTotal / count
-                val g = gTotal / count
-                val b = bTotal / count
+                var r = rTotal / count
+                var g = gTotal / count
+                var b = bTotal / count
                 blurredBitmap.setPixel(x, y, Color.rgb(r, g, b))
             }
         }

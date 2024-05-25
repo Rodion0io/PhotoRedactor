@@ -44,7 +44,7 @@ class Save(private val context: Context) {
 
     public fun savePicture(bitmap: Bitmap) {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val fileName = "IMG_$timeStamp.jpg"
+        val fileName = "IMG_$timeStamp.png"
         if (saveBitmapToGallery(bitmap, fileName)) {
             showSavedMessage()
         }

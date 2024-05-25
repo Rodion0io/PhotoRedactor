@@ -59,6 +59,12 @@ class RedactActivity : AppCompatActivity() {
         val saveInstance = Save(this)
 
         val backButton: View = findViewById(R.id.back)
+        val firstSeekBar: SeekBar = findViewById(R.id.seekBar1)
+        val firstText: TextView = findViewById(R.id.firstText)
+        val secondSeekBar: SeekBar = findViewById(R.id.seekBar2)
+        val secondText: TextView = findViewById(R.id.secondText)
+
+
         backButton.setOnClickListener { onClick() }
 
         setListners()
@@ -78,8 +84,6 @@ class RedactActivity : AppCompatActivity() {
             saveInstance.savePicture(bitmap)
         }
 
-
-
         val listActions: List<ItemBlock> = listOf(
             ItemBlock(R.drawable.baseline_crop_rotate_24, "Поворот"),
             ItemBlock(R.drawable.baseline_filter_24, "Фильтры"),
@@ -89,10 +93,14 @@ class RedactActivity : AppCompatActivity() {
 
         )
 
-        val firstSeekBar: SeekBar = findViewById(R.id.seekBar1)
-        val firstText: TextView = findViewById(R.id.firstText)
-        val secondSeekBar: SeekBar = findViewById(R.id.seekBar2)
-        val secondText: TextView = findViewById(R.id.secondText)
+        val listFilters : List<ItemBlock> = listOf(
+            ItemBlock(R.drawable.red_filter, "Красный"),
+            ItemBlock(R.drawable.green_filter, "Зеленый"),
+            ItemBlock(R.drawable.blue_filter, "Синий"),
+            ItemBlock(R.drawable.mosaic_filter, "Мозаика"),
+            ItemBlock(R.drawable.mirroring_filter, "отзеркал."),
+            ItemBlock(R.drawable.negative_filter, "Негатив")
+        )
 
         val carousel : RecyclerView = findViewById(R.id.recycler)
 
@@ -152,14 +160,6 @@ class RedactActivity : AppCompatActivity() {
             }
         }
 
-        val listFilters : List<ItemBlock> = listOf(
-            ItemBlock(R.drawable.red_filter, "Красный"),
-            ItemBlock(R.drawable.green_filter, "Зеленый"),
-            ItemBlock(R.drawable.blue_filter, "Синий"),
-            ItemBlock(R.drawable.mosaic_filter, "Мозаика"),
-            ItemBlock(R.drawable.mirroring_filter, "отзеркал."),
-            ItemBlock(R.drawable.negative_filter, "Негатив")
-        )
 
         val filterCarousel : RecyclerView = findViewById(R.id.filterRecycler)
 
