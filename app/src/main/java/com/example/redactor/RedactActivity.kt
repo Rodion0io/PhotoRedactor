@@ -94,7 +94,7 @@ class RedactActivity : AppCompatActivity() {
             ItemBlock(R.drawable.baseline_add_24, "Маскировка"),
             ItemBlock(R.drawable.baseline_retush_24, "Ретушь"),
             ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Масштаб"),
-            ItemBlock(R.drawable.baseline_face_retouching_natural_24, "Шифр")
+            ItemBlock(R.drawable.baseline_grid_4x4_24, "Шифр")
 
             )
 
@@ -129,6 +129,7 @@ class RedactActivity : AppCompatActivity() {
                         recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
+                        seekOffCrypt()
                         seekOnFirstBar()
                         seekBarRotate(firstSeekBar, firstText)
                     }
@@ -136,6 +137,7 @@ class RedactActivity : AppCompatActivity() {
                     1 -> {
                         btnOfUnsharp()
                         seekOffFirstBar()
+                        seekOffCrypt()
                         seekOffSecondBar()
                         recyclerOn()
                     }
@@ -144,6 +146,7 @@ class RedactActivity : AppCompatActivity() {
                         btnOnUnsharp()
                         recycerOff()
                         seekOffFirstBar()
+                        seekOffCrypt()
                         seekOffSecondBar()
                         seekOnSecondBar()
                     }
@@ -153,6 +156,7 @@ class RedactActivity : AppCompatActivity() {
                         recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
+                        seekOffCrypt()
                         seekOnFirstBar()
                         seekOnSecondBar()
                         seekBarRetouch(firstSeekBar, firstText, secondSeekBar, secondText)
@@ -163,6 +167,7 @@ class RedactActivity : AppCompatActivity() {
                         recycerOff()
                         seekOffFirstBar()
                         seekOffSecondBar()
+                        seekOffCrypt()
                         seekOnFirstBar()
                         seekBarScale(firstSeekBar, firstText)
                     }
@@ -520,6 +525,16 @@ class RedactActivity : AppCompatActivity() {
 
         }
 
+    }
+    public fun seekOffCrypt()
+    {
+        val TextForCrypt: EditText = findViewById(R.id.editText)
+        val leftButton: Button = findViewById(R.id.firstButton)
+        val rightButton: Button = findViewById(R.id.secondButton)
+
+        TextForCrypt.visibility = View.INVISIBLE
+        leftButton.visibility = View.INVISIBLE
+        rightButton.visibility = View.INVISIBLE
     }
 
 }
