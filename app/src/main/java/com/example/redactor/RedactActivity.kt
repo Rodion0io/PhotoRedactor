@@ -280,7 +280,7 @@ class RedactActivity : AppCompatActivity() {
         secondText: TextView
     ) {
         firstSeekBar.min = 0
-        firstSeekBar.max = 50
+        firstSeekBar.max = 70
         secondSeekBar.min = 0
         secondSeekBar.max = 50
 
