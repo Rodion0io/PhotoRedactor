@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -72,8 +73,7 @@ class MainActivity : AppCompatActivity() {
                     startActivityForResult(pickerIntent, REQUEST_CODE_PICK_IMAGE)
                 }
             } else {
-                Toast.makeText(this, "Gallery permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
-                openAppPermissionSettings()
+                pLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
     }
@@ -98,18 +98,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             REQUEST_PERMISSION_SETTINGS -> {
-                // No need to re-check permissions here
-            }
-        }
-    }
-
-    private fun checkCameraPermission() {
-        when {
-            ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
-                Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
-            }
-            else -> {
-                pLauncher.launch(Manifest.permission.CAMERA)
+                // Re-check permissions after returning from settings
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    takePictIntent()
+                }
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    setListenersGallery()
+                }
             }
         }
     }
@@ -117,9 +112,9 @@ class MainActivity : AppCompatActivity() {
     private fun registerPermissionListener() {
         pLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
                 openAppPermissionSettings()
             }
         }
@@ -135,8 +130,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } else {
-            Toast.makeText(this, "Camera permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
-            openAppPermissionSettings()
+            pLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
