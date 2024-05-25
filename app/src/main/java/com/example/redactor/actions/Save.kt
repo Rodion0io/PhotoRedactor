@@ -51,6 +51,6 @@ class Save(private val context: Context) {
     }
 
     private fun showSavedMessage() {
-        Toast.makeText(context, "Фото сохранено", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "@string/save", Toast.LENGTH_SHORT).show()
     }
 }

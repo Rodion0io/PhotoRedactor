@@ -283,7 +283,7 @@ class RedactActivity : AppCompatActivity() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                firstText.text = "Radius: ${progress}"
+                firstText.text = "@string/radius: ${progress}"
             }
 
             override fun onStartTrackingTouch(firstSeekBar: SeekBar) {}
@@ -297,7 +297,7 @@ class RedactActivity : AppCompatActivity() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                secondText.text = "Ratio: ${progress}"
+                secondText.text = "\"@string/ratio\": ${progress}"
             }
 
             override fun onStartTrackingTouch(secondSeekBar: SeekBar) {}
@@ -382,7 +382,7 @@ class RedactActivity : AppCompatActivity() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                firstText.text = "Radius: ${progress.toString()}"
+                firstText.text = "@string/radius: ${progress.toString()}"
             }
 
             override fun onStartTrackingTouch(firstSeekBar: SeekBar) {}
@@ -396,7 +396,7 @@ class RedactActivity : AppCompatActivity() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                secondText.text = "Ratio: ${progress.toString()}"
+                secondText.text = "\"@string/ratio\": ${progress.toString()}"
             }
 
             override fun onStartTrackingTouch(secondSeekBar: SeekBar) {}
@@ -427,7 +427,7 @@ class RedactActivity : AppCompatActivity() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                firstText.text = "Ratio: ${progress.toString()}"
+                firstText.text = "\"@string/ratio\": ${progress.toString()}"
             }
 
             override fun onStartTrackingTouch(firstSeekBar: SeekBar) {}
@@ -497,10 +497,11 @@ class RedactActivity : AppCompatActivity() {
         recyc.visibility = View.INVISIBLE
     }
 
+
     public fun btnOnUnsharp() {
         val btn: Button = findViewById(R.id.firstButton)
         btn.visibility = View.VISIBLE
-        btn.text = "Запуск"
+        btn.text = "@string/start"
     }
 
     public fun btnOfUnsharp() {
@@ -517,8 +518,8 @@ class RedactActivity : AppCompatActivity() {
         TextForCrypt.visibility = View.VISIBLE
         leftButton.visibility = View.VISIBLE
         rightButton.visibility = View.VISIBLE
-        leftButton.setText("Зашифровать")
-        rightButton.setText("Дешифровать")
+        leftButton.setText("@string/code")
+        rightButton.setText("@string/decryption")
         leftButton.setOnClickListener()
         {
             var cryptedPhoto = CryptText.CryptTextInImg(
