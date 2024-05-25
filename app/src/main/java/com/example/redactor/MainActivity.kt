@@ -6,8 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -29,11 +29,11 @@ class MainActivity : AppCompatActivity() {
         private const val FILE_PROVIDER_AUTHORITY = "com.example.redactor.fileprovider"
         const val KEY_IMAGE_URI = "imageUri"
         const val KEY_IMAGE_BITMAP = "imageBitmap"
-        private const val REQUEST_PERMISSION_SETTINGS = 3
     }
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var pLauncher: ActivityResultLauncher<String>
+    private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var storagePermissionLauncher: ActivityResultLauncher<String>
     private lateinit var imageTempUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,35 +46,30 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        registerPermissionListener()
+        registerPermissionLaunchers()
 
-        // Создаем imageTempUri здесь, так как это метод экземпляра
         imageTempUri = FileProvider.getUriForFile(
             this,
             FILE_PROVIDER_AUTHORITY,
             File(cacheDir, FILENAME_TEMP)
         )
 
-        val nextt: View = findViewById(R.id.secondBlock)
-        nextt.setOnClickListener { takePictIntent() }
-        setListenersGallery()
-        val toSpineButton: View = findViewById(R.id.toSpineButton)
-        toSpineButton.setOnClickListener {
+        binding.secondBlock.setOnClickListener { takePictIntent() }
+        binding.firstBlock.setOnClickListener { openGallery() }
+        binding.toSpineButton.setOnClickListener {
             val action = Intent(this, SplineActivity::class.java)
             startActivity(action)
         }
     }
 
-    private fun setListenersGallery() {
-        binding.firstBlock.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).also { pickerIntent ->
-                    pickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    startActivityForResult(pickerIntent, REQUEST_CODE_PICK_IMAGE)
-                }
-            } else {
-                pLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+    private fun openGallery() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).also { pickerIntent ->
+                pickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                startActivityForResult(pickerIntent, REQUEST_CODE_PICK_IMAGE)
             }
+        } else {
+            storagePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
 
@@ -97,24 +92,24 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-            REQUEST_PERMISSION_SETTINGS -> {
-                // Re-check permissions after returning from settings
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    takePictIntent()
-                }
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    setListenersGallery()
-                }
-            }
         }
     }
 
-    private fun registerPermissionListener() {
-        pLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+    private fun registerPermissionLaunchers() {
+        cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show()
+                takePictIntent()
             } else {
-                Toast.makeText(this, "Permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Camera permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
+                openAppPermissionSettings()
+            }
+        }
+
+        storagePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                openGallery()
+            } else {
+                Toast.makeText(this, "Storage permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
                 openAppPermissionSettings()
             }
         }
@@ -124,13 +119,12 @@ class MainActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                 takePictureIntent.resolveActivity(packageManager)?.also {
-                    // Устанавливаем EXTRA_OUTPUT и передаем Uri для сохранения фотографии
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageTempUri)
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                 }
             }
         } else {
-            pLauncher.launch(Manifest.permission.CAMERA)
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
@@ -138,6 +132,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             data = Uri.fromParts("package", packageName, null)
         }
-        startActivityForResult(intent, REQUEST_PERMISSION_SETTINGS)
+        startActivity(intent)
     }
 }
