@@ -260,7 +260,8 @@ class RedactActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 lifecycleScope.launch {
-                    val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
+                    val image = binding.imagePreview.drawable
+                    val originalPhoto = (image as BitmapDrawable).bitmap;
                     val rotatedBitmap = rotate.rotatePicture(
                         originalPhoto,
                         seekBar.progress.toDouble()
