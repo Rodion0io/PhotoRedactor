@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkCameraPermission() {
         when {
             ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
-                Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "@string/camera_success", Toast.LENGTH_SHORT).show()
             }
             else -> {
                 pLauncher.launch(Manifest.permission.CAMERA)
@@ -110,9 +110,9 @@ class MainActivity : AppCompatActivity() {
     private fun registerPermissionListner() {
         pLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "@string/camera", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "@string/camera_fail", Toast.LENGTH_SHORT).show()
             }
         }
     }

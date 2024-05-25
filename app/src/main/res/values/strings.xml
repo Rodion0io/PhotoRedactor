@@ -4,6 +4,9 @@
     <string name="all_photos">Смотреть все</string>
     <string name="on_camera">Камера</string>
     <string name="spline">Spline</string>
+    <string name="camera_success">Camera permission granted</string>
+    <string name="camera">Camera permission granted</string>
+    <string name="camera_fail">Camera permission denied</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
