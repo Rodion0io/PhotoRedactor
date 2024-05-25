@@ -4,10 +4,10 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -32,8 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
-    private lateinit var storagePermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var pLauncher: ActivityResultLauncher<String>
     private lateinit var imageTempUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,50 +45,31 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        registerPermissionLaunchers()
+        registerPermissionListner()
+        checkCameraPermission()
 
+        // Создаем imageTempUri здесь, так как это метод экземпляра
         imageTempUri = FileProvider.getUriForFile(
             this,
             FILE_PROVIDER_AUTHORITY,
             File(cacheDir, FILENAME_TEMP)
         )
 
-        binding.secondBlock.setOnClickListener { checkCameraPermissionAndTakePicture() }
-        binding.firstBlock.setOnClickListener { checkStoragePermissionAndOpenGallery() }
-        binding.toSpineButton.setOnClickListener {
+        val nextt: View = findViewById(R.id.secondBlock)
+        nextt.setOnClickListener { takePictIntent() }
+        setListnersGalary()
+        val toSpineButton: View = findViewById(R.id.toSpineButton)
+        toSpineButton.setOnClickListener {
             val action = Intent(this, SplineActivity::class.java)
-            startActivity(action)
-        }
+            startActivity(action) }
+
     }
 
-    private fun checkStoragePermissionAndOpenGallery() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            openGallery()
-        } else {
-            storagePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-    }
-
-    private fun checkCameraPermissionAndTakePicture() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            takePictIntent()
-        } else {
-            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-        }
-    }
-
-    private fun openGallery() {
-        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).also { pickerIntent ->
-            pickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivityForResult(pickerIntent, REQUEST_CODE_PICK_IMAGE)
-        }
-    }
-
-    private fun takePictIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageTempUri)
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+    private fun setListnersGalary() {
+        binding.firstBlock.setOnClickListener {
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).also { pickerIntent ->
+                pickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                startActivityForResult(pickerIntent, REQUEST_CODE_PICK_IMAGE)
             }
         }
     }
@@ -116,30 +96,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun registerPermissionLaunchers() {
-        cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                takePictIntent()
-            } else {
-                Toast.makeText(this, "Camera permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
-                openAppPermissionSettings()
+    private fun checkCameraPermission() {
+        when {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        storagePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                openGallery()
-            } else {
-                Toast.makeText(this, "Storage permission denied. Redirecting to settings...", Toast.LENGTH_SHORT).show()
-                openAppPermissionSettings()
+            else -> {
+                pLauncher.launch(Manifest.permission.CAMERA)
             }
         }
     }
 
-    private fun openAppPermissionSettings() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", packageName, null)
+    private fun registerPermissionListner() {
+        pLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
+            }
         }
-        startActivity(intent)
+    }
+
+    private fun takePictIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Устанавливаем EXTRA_OUTPUT и передаем Uri для сохранения фотографии
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageTempUri)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
     }
 }
