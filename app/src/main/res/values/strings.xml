@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Beta app</string>
+    <string name="app_name">Photo redact</string>
     <string name="app_title">Photo editor</string>
     <string name="all_photos">Смотреть все</string>
     <string name="on_camera">Камера</string>
