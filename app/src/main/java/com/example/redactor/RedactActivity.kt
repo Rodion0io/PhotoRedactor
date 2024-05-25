@@ -201,38 +201,44 @@ class RedactActivity : AppCompatActivity() {
             override fun onItemClick(position: Int, item: Int) {
                 when (position) {
                     0 -> {
+                        val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
                         val red =
-                            filers.redImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                            filers.redImage(originalPhoto)
                         binding.imagePreview.setImageBitmap(red)
                     }
 
                     1 -> {
+                        val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
                         val green =
-                            filers.greenImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                            filers.greenImage(originalPhoto)
                         binding.imagePreview.setImageBitmap(green)
                     }
 
                     2 -> {
+                        val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
                         val blue =
-                            filers.blueImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                            filers.blueImage(originalPhoto)
                         binding.imagePreview.setImageBitmap(blue)
                     }
 
                     3 -> {
+                        val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
                         val mosaic =
-                            filers.mosaicImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                            filers.mosaicImage(originalPhoto)
                         binding.imagePreview.setImageBitmap(mosaic)
                     }
 
                     4 -> {
+                        val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
                         val mirror =
-                            filers.mirrorImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                            filers.mirrorImage(originalPhoto)
                         binding.imagePreview.setImageBitmap(mirror)
                     }
 
                     5 -> {
+                        val originalPhoto = (binding.imagePreview.drawable as BitmapDrawable).bitmap;
                         val negative =
-                            filers.negativeImage((binding.imagePreview.drawable as BitmapDrawable).bitmap)
+                            filers.negativeImage(originalPhoto)
                         binding.imagePreview.setImageBitmap(negative)
                     }
                 }

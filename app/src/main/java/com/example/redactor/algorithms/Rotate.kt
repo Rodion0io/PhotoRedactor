@@ -32,11 +32,11 @@ class Rotate {
                 doubleArrayOf(newX, newY)
             }
 
-            val xs = newCorners.map { it[0] }
-            val ys = newCorners.map { it[1] }
+            val x = newCorners.map { it[0] }
+            val y = newCorners.map { it[1] }
 
-            val newWidth = ceil(xs.maxOrNull()!! - xs.minOrNull()!!).toInt()
-            val newHeight = ceil(ys.maxOrNull()!! - ys.minOrNull()!!).toInt()
+            val newWidth = ceil(x.maxOrNull()!! - x.minOrNull()!!).toInt()
+            val newHeight = ceil(y.maxOrNull()!! - y.minOrNull()!!).toInt()
 
             val outputBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888)
             val newCenterX = newWidth / 2.0
