@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
@@ -47,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         registerPermissionListener()
-        checkCameraPermission()
 
         // Создаем imageTempUri здесь, так как это метод экземпляра
         imageTempUri = FileProvider.getUriForFile(
@@ -100,8 +98,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             REQUEST_PERMISSION_SETTINGS -> {
-                // Re-check permissions after returning from settings
-                checkCameraPermission()
+                // No need to re-check permissions here
             }
         }
     }
@@ -123,6 +120,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
+                openAppPermissionSettings()
             }
         }
     }
