@@ -35,8 +35,8 @@ class CryptImage {
         val B= b.toString(2).padStart(8, '0')
         val C = c.toString(2).padStart(8, '0')
         val Apart = binary.substring(0, 3)
-        val Bpart = binary.substring(3, 2)
-        val Cpart = binary.substring(5, 3)
+        val Bpart = binary.substring(3, 5)
+        val Cpart = binary.substring(5, 8)
         val newA = A.substring(0,5) + Apart
         val newB = B.substring(0,6) + Bpart
         val newC = C.substring(0,5) + Cpart
